@@ -1,12 +1,19 @@
-# CS461-CLI-Chess
-Max VanRaden and John Bedette 2021
+# Pawn Storm
+Max Van Raden and John Bedette 2021
 
-Command Line Chess App with Chess AI in Rust
+Command Line Chess App with a chess engine opponent in Rust
 
 Our Goal with this project is to create a small chess app playable in a terminal with both multiplayer and versus chess AI Modes. 
 
+## Roadmap
+- Week 1 : Basic board with pieces moving
+- Week 2 : (Prototype Complete) Correct Chess rules and local multiplayer
+- Week 3 : Starting on engine and general sprucing up of things
+- Week 4 : (MVP Complete) Finish work on chess engine
+- Week 5 : Add algebraic notation parsing
+- Week 6 : Quashing of the bugs
 
-Project Goals
+## Project Goals
 - Command line interface 
 - Full implementation of the chess ruleset
 - Board display from perspective of black or white
@@ -15,7 +22,7 @@ Project Goals
 - Output game as PGN file 
 - Take move input as algebraic chess notation
 
-MVP Goals
+### MVP Goals
 - Command line interface 
 - Full implementation of ruleset
 - Local play, swap board
@@ -23,7 +30,7 @@ MVP Goals
 - AI play
 - Move input in A3B4 format
 
-Prototype Goals
+### Prototype Goals
 - CLI
 - Ruleset
 - Local play
@@ -31,9 +38,4 @@ Prototype Goals
 - Move input A3B4 format
 
 
-Roadmap
-- Week 1 : Basic board with pieces moving
-- Week 2 : Correct Chess rules and local multiplayer
-- Week 3 : Starting on AI and general sprucing up of things
-- Week 4-5 : finish work on AI
-- Week 6 : Quashing of the bugs
+
