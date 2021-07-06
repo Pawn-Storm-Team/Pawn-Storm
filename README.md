@@ -1,0 +1,39 @@
+# CS461-CLI-Chess
+Max VanRaden and John Bedette 2021
+
+Command Line Chess App with Chess AI in Rust
+
+Our Goal with this project is to create a small chess app playable in a terminal with both multiplayer and versus chess AI Modes. 
+
+
+Project Goals
+- Command line interface 
+- Full implementation of the chess ruleset
+- Board display from perspective of black or white
+- Local play, swap player/board view per move 
+- AI player for singleplayer mode
+- Output game as PGN file 
+- Take move input as algebraic chess notation
+
+MVP Goals
+- Command line interface 
+- Full implementation of ruleset
+- Local play, swap board
+- Board display from black or white
+- AI play
+- Move input in A3B4 format
+
+Prototype Goals
+- CLI
+- Ruleset
+- Local play
+- Board display
+- Move input A3B4 format
+
+
+Roadmap
+- Week 1 : Basic board with pieces moving
+- Week 2 : Correct Chess rules and local multiplayer
+- Week 3 : Starting on AI and general sprucing up of things
+- Week 4-5 : finish work on AI
+- Week 6 : Quashing of the bugs
