@@ -1,5 +1,5 @@
 # Pawn Storm
-Max Van Raden and John Bedette 2021
+Max Van Raden and John Bedette, 2021
 
 Command Line Chess App with a chess engine opponent in Rust
 
