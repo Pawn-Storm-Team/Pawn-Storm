@@ -106,25 +106,25 @@ pub fn test_build(){
                 player1.push(_p);
             },
             9|16 => {
-                _p = Piece::new(Kind::ROOK,i,i,0);
+                _p = Piece::new(Kind::ROOK,i,i-8,0);
                 player1.push(_p);
             },
             10|15 => {
-                _p = Piece::new(Kind::KNIGHT,i,i,0);
+                _p = Piece::new(Kind::KNIGHT,i,i-8,0);
                 player1.push(_p);
             },
             11|14 => {
-                _p = Piece::new(Kind::BISHOP,i,i,0);
+                _p = Piece::new(Kind::BISHOP,i,i-8,0);
                 player1.push(_p);
 
             },
             12 => {
-                _p = Piece::new(Kind::QUEEN,i,i,0);
+                _p = Piece::new(Kind::QUEEN,i,i-8,0);
                 player1.push(_p);
 
             },
             13 =>{
-                _p = Piece::new(Kind::KING,i,i,0);
+                _p = Piece::new(Kind::KING,i,i-8,0);
                 player1.push(_p);
 
             }
