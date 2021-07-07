@@ -92,6 +92,7 @@ pub fn test_build(){
     //storage of piece structs,
     //@TODO:this would probably be good as its own struct
     let mut player1= <Vec<Piece>>::new();
+    let mut board= 
     
     //@TODO: doing 1 to 17 because chess notation starts with 1, might change later
     for i in 1..17{
@@ -142,4 +143,15 @@ pub fn test_build(){
         print!("{:?}\t",player1[i].p)
     }
     println!("\nDoing something with the bool returned from legal_move: {}\n",legal_move(player1[1].clone()));
+    //display board
+    println!("\t   A     B     C     D     E     F     G     H");
+    for i in 8..1{ //start with rank, traversing down 
+        print!("\t   -     -     -     -     -     -     -     -");
+        print!("{}\t", i);//display rank on left of board
+        for k in 1..8{
+            if(player1[board[k][i].copy()].id != 0)
+
+        }
+
+    }
 }
