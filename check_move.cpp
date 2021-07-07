@@ -1,98 +1,4 @@
-//
-// Created by Max Van Raden on 3/27/21.
-//
 #include "board.h"
-
-square::square() {
-    piece = nullptr;
-}
-
-square::~square() {
-    if(piece) {
-        delete piece;
-        piece = nullptr;
-    }
-
-}
-//Adds the pieces for a standard ascii-chess game to the board
-int chessboard::initialize() { //can be used to reset or initialize the board
-    for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece != nullptr){
-                delete board[i][k].piece;
-                board[i][k].piece = nullptr;
-            }
-        }
-    }
-    for(int i = 0; i < 8; ++i) {
-        bool color = true; 
-        for(int k = 0; k < 8; ++k){
-            if(i > 3) { // switch color flag to initialize black's pieces 
-                color = false;
-            }
-            if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
-                if(k == 0 || k == 7) //A1 or H1, white rooks
-                    board[i][k].piece = new rook(color);
-                if(k == 1 || k == 6) //B1 or G1, white knights
-                    board[i][k].piece = new knight(color);
-                if(k == 2 || k == 5) //C1 or F1, white bishops
-                    board[i][k].piece = new bishop(color);
-                if(k == 3) //D1, white queen
-                    board[i][k].piece = new queen(color);
-                if(k == 4) //E1, white king
-                    board[i][k].piece = new king(color);
-            }
-            if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
-                board[i][k].piece = new pawn(color);
-            }
-        }
-    }
-    return 0;
-}
-//frees memory allocated during piece creation
-int chessboard::clear() {
-    int count = 0;
-    for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece != nullptr){
-                delete board[i][k].piece;
-                board[i][k].piece = nullptr;
-                ++count;
-            }
-        }
-    }
-    return count;
-}
-
-int chessboard::get_pieces() {
-    int count = 0;
-    for(int i = 0; i < 8; ++i) {
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece)
-                ++count;
-        }
-    }
-    return count;
-}
-
-void chessboard::draw_board() {
-    std::cout << "\n\n";
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
-    for(int i = 7; i >= 0; --i) { //print from white's perspective, so first square printed will be A8, so ranks count backwards
-        std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-        std::cout << i+1 << "\t";
-        for(int k = 0; k < 8; ++k) {
-            if(board[i][k].piece)
-                //std::cout << "| P ";
-                std::cout << "|  " << board[i][k].piece->icon << "  ";
-            else
-                std::cout << "|     ";
-        }
-        std::cout << "|\t" << i+1 << std::endl;
-    }
-    std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
-}
 //TODO implement pin check
 //TODO implement check check
 //TODO handle en passant
@@ -101,9 +7,12 @@ void chessboard::draw_board() {
 //WHEN PASSING TO FUNCTION REMEMBER THAT RANK IS PASSED BEFORE FILE, UNLIKE A CHESS SQUARE - C4 would be passed as [3,2] (with C being 2 and 4 being 3)
 //This function checks the legality of a move, and returns an error code depending on why the move is illegal. Moves that would capture but are not marked
 //as captures are reported as illegal.
-int chessboard::check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture) {
 
-    if(!board[init_rank][init_file].piece) {//there do be a piece check
+int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file){
+    if(init_rank > 7 || init_rank < 0 || init_file > 7 || init_file < 0) {//the init square do exist check
+        return -2;//Out of bounds error
+    }
+    if(!(game->board[init_rank][init_file].piece)) {//there do be a piece check
         return -1;//No piece error
     }
     if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
@@ -112,9 +21,31 @@ int chessboard::check_move(int init_rank, int init_file, int dest_rank, int dest
     if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
         return -4;//Literally not a move error
     }
-    if(board[dest_rank][dest_file].piece->owner == board[init_rank][init_file].piece->owner) {//occupied by same side piece check
+    if((game->board[dest_rank][dest_file].piece->owner) == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
         return -5;//Self-capture error
     }
+}
+
+int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, chessboard * game) {
+
+    //breaking this out
+    if(!game->board[init_rank][init_file].piece) {//there do be a piece check
+        return -1;//No piece error
+    }
+    if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
+        return -2;//Out of bounds error
+    }
+    if(init_rank > 7 || init_rank < 0 || init_file > 7 || init_file < 0) {//the init square do exist check
+        return -2;//Out of bounds error
+    }
+    if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
+        return -4;//Literally not a move error
+    }
+    if(game->board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
+        return -5;//Self-capture error
+    }
+    int agnostic_check = agnostic_check(game,init_rank,init_file,dest_file,dest_rank);
+
 
     //
     //PIECE MOVEMENT RULES
