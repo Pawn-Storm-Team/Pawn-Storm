@@ -25,38 +25,26 @@ int chessboard::initialize() { //can be used to reset or initialize the board
         }
     }
     for(int i = 0; i < 8; ++i) {
+        bool color = true; 
         for(int k = 0; k < 8; ++k){
-            if(i == 0) { //rank is 1, white backrank, initialize with pieces
+            if(i > 3) { // switch color flag to initialize black's pieces 
+                color = false;
+            }
+            if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
                 if(k == 0 || k == 7) //A1 or H1, white rooks
-                    board[i][k].piece = new rook(true);
+                    board[i][k].piece = new rook(color);
                 if(k == 1 || k == 6) //B1 or G1, white knights
-                    board[i][k].piece = new knight(true);
+                    board[i][k].piece = new knight(color);
                 if(k == 2 || k == 5) //C1 or F1, white bishops
-                    board[i][k].piece = new bishop(true);
+                    board[i][k].piece = new bishop(color);
                 if(k == 3) //D1, white queen
-                    board[i][k].piece = new queen(true);
+                    board[i][k].piece = new queen(color);
                 if(k == 4) //E1, white king
-                    board[i][k].piece = new king(true);
+                    board[i][k].piece = new king(color);
             }
-            if(i == 1) { //rank is 2, white frontrank, initialize with pawns
-                board[i][k].piece = new pawn(true);
+            if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
+                board[i][k].piece = new pawn(color);
             }
-            if(i == 6) { //rank is 7, black frontrank, initialize with pawns
-                board[i][k].piece = new pawn(false);
-            }
-            if(i == 7) { //rank is 8, black backrank, initialize with pieces
-                if(k == 0 || k == 7) //A8 or H8, black rooks
-                    board[i][k].piece = new rook(false);
-                if(k == 1 || k == 6) //B1 or G1, white knights
-                    board[i][k].piece = new knight(false);
-                if(k == 2 || k == 5) //C1 or F1, white bishops
-                    board[i][k].piece = new bishop(false);
-                if(k == 3) //D1, white queen
-                    board[i][k].piece = new queen(false);
-                if(k == 4) //E1, white king
-                    board[i][k].piece = new king(false);
-            }
-
         }
     }
     return 0;
