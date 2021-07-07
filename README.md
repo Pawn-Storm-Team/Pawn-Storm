@@ -1,7 +1,7 @@
 # Pawn Storm
 Max Van Raden and John Bedette, 2021
 
-Command Line Chess App with a chess engine opponent in Rust
+Command Line Chess App with a chess engine opponent in C++
 
 Our Goal with this project is to create a small chess app playable in a terminal with both multiplayer and versus chess AI Modes. 
 
