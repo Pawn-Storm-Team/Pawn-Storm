@@ -12,8 +12,9 @@ int main() {
     board.draw_board();
     cout << "\nNumber of pieces on board after " << board.clear() << " pieces were cleared: " << board.get_pieces();
     */
+    char choice = '\0';
     invalid_choice:
-    char choice = menu()[0];
+    choice = menu()[0];
     switch(choice) {
         case '1':
         case '2':
@@ -23,7 +24,7 @@ int main() {
         case '6':
         case '7':
         default: 
-            goto invalid_choice;
+            goto invalid_choice; //if the menu isn't selected, restart the process
     }
     return 0;
 }

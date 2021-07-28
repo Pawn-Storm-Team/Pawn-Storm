@@ -37,17 +37,17 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
     int result;
     switch(toupper(icon)){
         case 'P':
-            if(icon == 'p') result = black_pawn_check();
-            else result = white_pawn_check();
+            if(icon == 'p') result = black_pawn_check(game, init_rank, init_file, dest_rank, dest_file);
+            else result = white_pawn_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         case 'N':
-            result = knight_check();
+            result = knight_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         case 'R':
-            result = rook_check();
+            result = rook_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         case 'Q':
-            result = queen_check();
+            result = queen_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         case 'K':
             result = king_check();
@@ -66,7 +66,7 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
         }
         //Clear path checking
         if(dest_rank == init_rank+2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank-1][dest_file].piece)
+            if(game->board[dest_rank-1][dest_file].piece)
                 return -6;//blocking piece
         }
     }
@@ -76,18 +76,18 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
             return -3;//illegal piece movement
         //clear path checking
         if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank+1][dest_file].piece)
+            if(game->board[dest_rank+1][dest_file].piece)
                 return -6;//blocking piece
         }
     }
     //no path checking necessary as the horsey bois hop
-    if(board[init_rank][init_file].piece->icon == 'N' || board[init_rank][init_file].piece->icon == 'n') {//knight moves, not to be confused with Night Moves by bob seger
+    if(game->board[init_rank][init_file].piece->icon == 'N' || game->board[init_rank][init_file].piece->icon == 'n') {//knight moves, not to be confused with Night Moves by bob seger
         if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) 
         || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2))))//Jesus christ I hope this is correct
             return -3;//illegal piece movement
     }
 
-    if(board[init_rank][init_file].piece->icon == 'B' || board[init_rank][init_file].piece->icon == 'b') {//bishop move rules
+    if(game->board[init_rank][init_file].piece->icon == 'B' || game->board[init_rank][init_file].piece->icon == 'b') {//bishop move rules
         int x = init_rank - dest_rank;
         if(init_file - dest_file != x || init_file - dest_file != -x)
             return -3;//illegal piece movement
@@ -128,7 +128,7 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
         if(!legal_move)
             return -3;//illegal piece movement
     }
-    if(board[init_rank][init_file].piece->icon == 'K' || board[init_rank][init_file].piece->icon == 'k') {//king move rules
+    if(game->board[init_rank][init_file].piece->icon == 'K' || game->board[init_rank][init_file].piece->icon == 'k') {//king move rules
         if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
             return -3;//illegal piece movement
         }
