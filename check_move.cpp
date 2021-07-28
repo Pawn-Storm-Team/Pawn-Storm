@@ -50,7 +50,7 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
             result = queen_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         case 'K':
-            result = king_check();
+            result = king_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         default:
             return -80;//placeholder for default error
