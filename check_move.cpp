@@ -21,9 +21,16 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
     if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
         return -4;//Literally not a move error
     }
-    if((game->board[dest_rank][dest_file].piece->owner) == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
-        return -5;//Self-capture error
+    if(game->board[dest_rank][dest_file].piece) {//there is a piece in the destination square, check for legality
+        if(game->board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
+            return -5;
+            } //
+        if(game->board[dest_rank][dest_file].piece->owner != game->board[init_rank][init_file].piece->owner) {//occupied by an enemy piece 
+            return 1;
+        }
     }
+    else 
+        return 0;//This move is so far legal, but not a capture
 }
 
 int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, chessboard * game) {
@@ -83,7 +90,7 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
     //no path checking necessary as the horsey bois hop
     if(game->board[init_rank][init_file].piece->icon == 'N' || game->board[init_rank][init_file].piece->icon == 'n') {//knight moves, not to be confused with Night Moves by bob seger
         if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) 
-        || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2))))//Jesus christ I hope this is correct
+        || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2)))) //Jesus christ I hope this is correct
             return -3;//illegal piece movement
     }
 
@@ -142,14 +149,16 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
 }
 //Individual piece move check functions 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
-    if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) {
-        return -3;//illegal piece movement
-        }
-        //Clear path checking
-        if(dest_rank == init_rank+2) {//check for a blocking piece on the skipped square when moving two squares
-            if(game->board[dest_rank-1][dest_file].piece)
-                return -6;//blocking piece
-        }
+    if(dest_file != init_file && !game->board[init_rank + 1][dest_file].piece) {
+        if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) {//moving one or two squares, checking for correct rank for moving two
+          return -3;//illegal piece movement
+          }
+            //Clear path checking
+            if(dest_rank == init_rank+2) {//check for a blocking piece on the skipped square when moving two squares
+                if(game->board[dest_rank-1][dest_file].piece)
+                    return -6;//blocking piece
+            }
+    }
 }
 int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6))
