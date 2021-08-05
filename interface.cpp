@@ -9,6 +9,8 @@ Interface::Interface(){
     gameType = local; 
     white = black = mult = false;
     //
+
+    cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
     intro();
     menu();
 }
@@ -20,7 +22,6 @@ Interface::~Interface(){
     // }
 };
 void dispIntroMenu(){
-    cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
     cout << "\t 1.\tPlay against a local opponent \t\t\n\n";
     cout << "\t 2.\tPlay a networked game as White \t\t\n\n";
     cout << "\t 3.\tPlay a networked game as Black \t\t\n\n";
@@ -39,16 +40,17 @@ int Interface::intro() {
     cin >> input;
     cin.clear();
     cin.ignore();
-    if(isdigit(input[0]) && input.length() == 1){
-        int choice = stoi(input);
-        while(!(isdigit(input[0]) && input.length() == 1) { //check if input is valid - both a single character and numeric
-                cout << "\tThis input is invalid. Please enter a single digit corresponding to your desired menu choice.\n\n";
-                input.clear();
-                cout << "\n>> ";
-                cin >> input;
-                cin.clear();
-                cin.ignore();
-            }
+    int choice;
+    while(
+        !(isdigit(input[0]) && input.length() == 1) &&   //check if input is valid - both a single character and numeric
+        (choice = stoi(input)) >= 1 && choice <= 6      //by this point isdigit and input length should have guaranteed  
+        ){                                              //input is a single digit integer, we assign and then check range
+        cout << "\tThis input is invalid. Please enter a single digit corresponding to your desired menu choice.\n\n";
+        input.clear();
+        cout << "\n>> ";
+        cin >> input;
+        cin.clear();
+        cin.ignore();
     }
 
 
@@ -73,41 +75,11 @@ int Interface::intro() {
             break;
         default: 
             cout << "Invalid Choice.";
-            goto invalid_choice; //if the menu isn't selected, restart the process
+            choice = intro();//call the function again from the top, capture correct choice value from recursive response
     }
     return choice;
 }
 
 int Interface::menu(){
-
+return 0;
 }
-/*
-
-
-    switch(input[0]) {
-        case '1':
-            white = true;
-            black = true;
-            break;
-        case '2':
-            white = true;
-            mult = true;
-            break;
-        case '3':
-            black = true;
-            mult = true;
-            break;
-        case '4':
-            white = true;
-            break;
-        case '5':
-            black = true;
-            break;
-        case '6':
-            cout << "Goodbye";
-            return;
-        default: 
-            cout << "Something has gone badly wrong, restarting,"
-            goto invalid_choice; //if the menu isn't selected, restart the process
-    }
-    */
