@@ -28,23 +28,8 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
 
 int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, chessboard * game) {
 
-    //breaking this out
-    if(!game->board[init_rank][init_file].piece) {//there do be a piece check
-        return -1;//No piece error
-    }
-    if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
-        return -2;//Out of bounds error
-    }
-    if(init_rank > 7 || init_rank < 0 || init_file > 7 || init_file < 0) {//the init square do exist check
-        return -2;//Out of bounds error
-    }
-    if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
-        return -4;//Literally not a move error
-    }
-    if(game->board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
-        return -5;//Self-capture error
-    }
     int agnostic_check = agnostic_check(game,init_rank,init_file,dest_file,dest_rank);
+    if (agnostic_check < 0) return agnostic_check;
 
 
     //

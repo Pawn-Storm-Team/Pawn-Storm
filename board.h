@@ -2,6 +2,7 @@
 // Created by Max Van Raden on 3/27/21.
 //
 #include "pieces.h"
+#include "interface.h"
 
 #ifndef CHESS_BOARD_H
 #define CHESS_BOARD_H
