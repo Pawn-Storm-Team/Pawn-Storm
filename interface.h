@@ -27,6 +27,7 @@ class Interface{
         int build_vs_AI();
 
         int action_prompt();
-        int turn_prompt(int[]) 
-        bool move_format_validator(char,char,char,char)
+        int turn_prompt(int[]);
+        bool move_format_validator(char,char,char,char);
 };
+void dispIntroMenu();

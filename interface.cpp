@@ -111,19 +111,17 @@ int Interface::turn_prompt(int * in){
     //check member for who's turn it is, set string to white or black
     if(!current_turn) cout << "White";
     else cout << "Black";
-    cout << player << "'s turn\n" << "Format move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
+    cout << "'s turn\n" << "Format move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
 
     string input = string();
     bool valid = false;
 
     cin >> input;
     cin.clear();
-    cin.ignore()
+    cin.ignore();
 
     //todo sanitize further
-    char a_rank = input[0], a_file = input[2], b_rank =input[4], b_file = input[6];
-    while(move_format_validator(a_rank,a_file,b_rank,b_file)
-    ){
+    while(!move_format_validator(input[0],input[2],input[4],input[6])){
         cout << "\tThis input is invalid. Please enter only digits in a:b,x:y formatting.\n\n";
         input.clear();
         cout << "\n>> ";
@@ -132,15 +130,21 @@ int Interface::turn_prompt(int * in){
         cin.ignore();
     }
 
+    //a is origin, b is dest
+    int a_rank, a_file, b_rank, b_file;
+    a_rank = int(input[0]);
+    a_file = int(input[2]);
+    b_rank = int(input[4]);
+    b_file = int(input[6]);
 
-
-    }
+    //for now
+    return 0;
 }
 
 
 //man this seems just so ugly
 //we're subtracting double negative from valid, so if any of these pops a "YES this DOESNT work" we get back invalid 
-bool move_format_validator(char a, char b, char x, char y){
+bool move_format_validator(char a, char b, char c, char d){
     int valid = 1;
     valid -= 0 == isdigit(a);
     valid -= 0 == isdigit(b);
