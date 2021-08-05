@@ -10,7 +10,7 @@ enum GameType{ local, whiteOnline, blackOnline, whiteAI, BlackAI};
 
 class Interface{
         //chessboard board;
-        bool white, black, mult;//to cut
+        bool white, black, mult;//TODO: cut
         GameType gameType;
         int intro();
         int menu();

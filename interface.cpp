@@ -1,3 +1,9 @@
+//
+// john bedette 
+//
+//
+//
+
 #include <iostream>
 #include <string>
 #include "interface.h"
@@ -21,16 +27,6 @@ Interface::~Interface(){
     //     board = nullptr;
     // }
 };
-void dispIntroMenu(){
-    cout << "\t 1.\tPlay against a local opponent \t\t\n\n";
-    cout << "\t 2.\tPlay a networked game as White \t\t\n\n";
-    cout << "\t 3.\tPlay a networked game as Black \t\t\n\n";
-    cout << "\t 4.\tPlay against the AI as White \t\t\n\n";
-    cout << "\t 5.\tPlay against the AI as Black \t\t\n\n";
-    cout << "\t 6.\tExit \t\t\n\n";
-    cout << "\n>> ";
-
-}
 
 int Interface::intro() {
 
@@ -82,4 +78,15 @@ int Interface::intro() {
 
 int Interface::menu(){
 return 0;
+}
+
+void dispIntroMenu(){
+    cout << "\t 1.\tPlay against a local opponent \t\t\n\n";
+    cout << "\t 2.\tPlay a networked game as White \t\t\n\n";
+    cout << "\t 3.\tPlay a networked game as Black \t\t\n\n";
+    cout << "\t 4.\tPlay against the AI as White \t\t\n\n";
+    cout << "\t 5.\tPlay against the AI as Black \t\t\n\n";
+    cout << "\t 6.\tExit \t\t\n\n";
+    cout << "\n>> ";
+
 }
