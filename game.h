@@ -24,3 +24,5 @@ class Game{
     int action_prompt();
     int turn_prompt(int[]) 
 }
+
+bool move_format_validator(char,char,char,char)

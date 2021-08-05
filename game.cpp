@@ -52,22 +52,65 @@ int Game::action_prompt(){
 int Game::turn_prompt(int * in){
 
     //check member for who's turn it is, set string to white or black
-    if(!current_turn){ cout << "White";
+    if(!current_turn) cout << "White";
     else cout << "Black";
     cout << player << "'s turn\n" << "Format move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
 
     string input = string();
-    string token;
     bool valid = false;
 
     cin >> input;
     cin.clear();
     cin.ignore()
-    size_t pos = 0;
 
-    while((pos = input.find(",")) != std::string::npos){
-       token = s.sub(0,pos)
+    //todo sanitize further
+    char a_rank = input[0], a_file = input[2], b_rank =input[4], b_file = input[6];
+    while(move_format_validator(a_rank,a_file,b_rank,b_file)
+    ){
+        cout << "\tThis input is invalid. Please enter only digits in a:b,x:y formatting.\n\n";
+        input.clear();
+        cout << "\n>> ";
+        cin >> input;
+        cin.clear();
+        cin.ignore();
     }
-    
 
+
+
+    }
 }
+
+bool move_format_validator(char a, char b, char x, char y){
+    bool valid = false;
+    valid = isdigit(a);
+    valid = isdigit(b);
+    valid = isdigit(c);
+    valid = isdigit(d);
+    valid = 1 <= (int)a && (int)a <= 8;
+    valid = 1 <= (int)b && (int)b <= 8;
+    valid = 1 <= (int)c && (int)c <= 8;
+    valid = 1 <= (int)d && (int)e <= 8;
+    return valid;
+    /*
+
+    //strip out white space
+    size_t pos = 0; 
+    while((pos = input.find(" ")) != string::npos){
+       input.erase(pos,1);
+    }
+    //parsing input
+    size_t pos = 0;
+    string my_rankfile;
+
+    //find position of delimiter ","
+    //then take substring and store in my_ranfile
+    //then erase the taken substring plus the delimiter
+    pos = input.find(",");
+    my_rankfile = input.substr(0,pos);
+    input.erase(0,pos+1);
+
+    //there should be digit:digit in both my_rankfile and input
+    //sanitize 
+    */
+
+
