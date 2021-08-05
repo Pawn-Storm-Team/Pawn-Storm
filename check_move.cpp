@@ -21,53 +21,181 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
     if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
         return -4;//Literally not a move error
     }
-    if((game->board[dest_rank][dest_file].piece->owner) == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
-        return -5;//Self-capture error
+    //This must be the last check as it returns a 1 for captures. Any checks after this may not occur
+    if(game->board[dest_rank][dest_file].piece) {//there is a piece in the destination square, check for legality
+        if(game->board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
+            return -5; //self-capture error
+            } 
+        if(game->board[dest_rank][dest_file].piece->owner != game->board[init_rank][init_file].piece->owner) {//occupied by an enemy piece 
+            return 1; //this move is a capture
+        }
     }
+    else 
+        return 0;//This move is so far legal, but not a capture
 }
 
 int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, chessboard * game) {
 
-    int agnostic_check = agnostic_check(game,init_rank,init_file,dest_file,dest_rank);
-    if (agnostic_check < 0) return agnostic_check;
+    //breaking this out
+
+    int a_check = agnostic_check(game,init_rank,init_file,dest_file,dest_rank);
+    if(a_check < 0) return a_check;
+    char icon = game->board[init_rank][init_file].piece->icon;
+    bool is_capture = false;
+    if(a_check == 1)
+        is_capture = true;
 
 
+    int result;
+    switch(toupper(icon)){
+        case 'P':
+            if(icon == 'p') result = black_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture);
+            else result = white_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture);
+            break;
+        case 'N':
+            result = knight_check(game, init_rank, init_file, dest_rank, dest_file);
+            break;
+        case 'R':
+            result = rook_check(game, init_rank, init_file, dest_rank, dest_file);
+            break;
+        case 'Q':
+            result = queen_check(game, init_rank, init_file, dest_rank, dest_file);
+            break;
+        case 'K':
+            result = king_check(game, init_rank, init_file, dest_rank, dest_file);
+            break;
+        default:
+            return -80;//placeholder for default error
+        
+    }
+ 
+}
+//Individual piece move check functions 
+int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
+    if(!is_capture) {
+        if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) { //moving one or two squares, checking for correct rank for moving two
+          return -3; //illegal piece movement
+          }
+            //Clear path checking
+            if(dest_rank == init_rank+2) { //check for a blocking piece on the skipped square when moving two squares
+                if(game->board[dest_rank-1][dest_file].piece)
+                    return -6; //blocking piece
+            }
+    }
+    else { //check for capture conditions
+        if(dest_rank != init_rank+1) { 
+            if(dest_file != init_file+1 && dest_file != init_file-1) {
+                return -3; //illegal piece movement 
+            }
+        
+        }
+    }
+}
+int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
+    if(!is_capture) { //check for non-capture conditions
+        if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6)) {
+            return -3;//illegal piece movement
+            //clear path checking
+            if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
+                if(game->board[dest_rank+1][dest_file].piece)
+                    return -6;//blocking piece
+            }
+        }
+    }
+    else { //check for capture conditions
+        if(dest_rank != init_rank-1) { 
+            if(dest_file != init_file+1 && dest_file != init_file-1) {
+                return -3; //illegal piece movement 
+            }
+        
+        }
+    }
+    
+}
+int knight_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
+    if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2))))//Jesus christ I hope this is correct
+        return -3;//illegal piece movement
+}
+int bishop_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
+    int x = init_rank - dest_rank;
+        if(init_file - dest_file != x || init_file - dest_file != -x)
+            return -3;//illegal piece movement
+}
+int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
+    if(init_file - dest_file != 0) {//if a rook moves on a file, it cannot move on a rank, and vice versa
+        if(init_rank - dest_rank != 0) {
+            return -3;//illegal piece movement
+        }
+    }
+}
+int queen_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
+    bool legal_move = true;
+
+        //bishop component of queen movement check
+        int x = init_rank - dest_rank;
+        if (init_file - dest_file != x || init_file - dest_file != -x)
+            legal_move = false;
+
+        //rook component of queen movement check
+        if (!legal_move) {//only check the rook component if bishop component was false
+            if(init_file - dest_file != 0 && init_rank - dest_rank == 0) {
+                legal_move = true;
+                }
+            if(!legal_move) {//only check for other direction of rook movement if necessary
+                if (init_rank - dest_rank != 0 && init_file - dest_file == 0)
+                    legal_move = true;
+            }
+        }
+        if(!legal_move)
+            return -3;//illegal piece movement  
+}
+int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
+    if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
+            return -3;//illegal piece movement
+        }
+        if(init_rank - dest_rank < -1 || init_file - dest_file < -1) {
+            return -3;//illegal piece movement
+        }
+}
+
+/*    
     //
     //PIECE MOVEMENT RULES
     //
-    if(board[init_rank][init_file].piece->icon == 'P') {//white pawn move rules - no capture yet
+    if(icon == 'P') {//white pawn move rules - no capture yet
         if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) {
             return -3;//illegal piece movement
         }
         //Clear path checking
         if(dest_rank == init_rank+2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank-1][dest_file].piece)
+            if(game->board[dest_rank-1][dest_file].piece)
                 return -6;//blocking piece
         }
     }
 
-    if(board[init_rank][init_file].piece->icon == 'p') {//black pawn move rules - no capture yet
+    if(icon == 'p') {//black pawn move rules - no capture yet
         if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6))
             return -3;//illegal piece movement
         //clear path checking
         if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank+1][dest_file].piece)
+            if(game->board[dest_rank+1][dest_file].piece)
                 return -6;//blocking piece
         }
     }
     //no path checking necessary as the horsey bois hop
-    if(board[init_rank][init_file].piece->icon == 'N' || board[init_rank][init_file].piece->icon == 'n') {//knight moves, not to be confused with Night Moves by bob seger
-        if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2))))//Jesus christ I hope this is correct
+    if(game->board[init_rank][init_file].piece->icon == 'N' || game->board[init_rank][init_file].piece->icon == 'n') {//knight moves, not to be confused with Night Moves by bob seger
+        if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) 
+        || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2)))) //Jesus christ I hope this is correct
             return -3;//illegal piece movement
     }
 
-    if(board[init_rank][init_file].piece->icon == 'B' || board[init_rank][init_file].piece->icon == 'b') {//bishop move rules
+    if(game->board[init_rank][init_file].piece->icon == 'B' || game->board[init_rank][init_file].piece->icon == 'b') {//bishop move rules
         int x = init_rank - dest_rank;
         if(init_file - dest_file != x || init_file - dest_file != -x)
             return -3;//illegal piece movement
     }
 
-    if(board[init_rank][init_file].piece->icon == 'R' || board[init_rank][init_file].piece->icon == 'r') {//rook movement rules
+    if(toupper(icon) == 'R') {//rook movement rules
         if(init_file - dest_file != 0) {//if a rook moves on a file, it cannot move on a rank, and vice versa
             if(init_rank - dest_rank != 0) {
                 return -3;//illegal piece movement
@@ -81,7 +209,7 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
         }
     }
 
-    if(board[init_rank][init_file].piece->icon == 'Q' || board[init_rank][init_file].piece->icon == 'q') {//queen move rules
+    if(toupper(icon) == 'Q') {//queen move rules
         bool legal_move = true;
 
         //bishop component of queen movement check
@@ -102,7 +230,7 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
         if(!legal_move)
             return -3;//illegal piece movement
     }
-    if(board[init_rank][init_file].piece->icon == 'K' || board[init_rank][init_file].piece->icon == 'k') {//king move rules
+    if(game->board[init_rank][init_file].piece->icon == 'K' || game->board[init_rank][init_file].piece->icon == 'k') {//king move rules
         if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
             return -3;//illegal piece movement
         }
@@ -113,5 +241,4 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
     }
 
     return 0;//legal piece movement
-}
-
+    */

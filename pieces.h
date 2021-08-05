@@ -9,6 +9,8 @@
 
 #endif //CHESS_CHESS_H
 
+using namespace std;
+
 int print();
 
 class piece {
