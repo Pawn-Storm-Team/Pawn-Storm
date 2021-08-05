@@ -1,12 +1,21 @@
 //
 // John Bedette
 //
-// Location agnostic interface struct
-// will take in raw data such as, spit it back out where it needs to go. 
 //
+//
+#include "board.h"
 
-struct interface{
-    int intro();
-    int menu();
-    int display(void);
+enum GameType{ local, whiteOnline, blackOnline, whiteAI, BlackAI}
+
+
+class Interface{
+        chessboard board;
+        bool white, black, mult;
+        GameType gameType;
+        int intro();
+        int menu();
+
+    public:
+        Interface();
+        ~Interface();
 };
