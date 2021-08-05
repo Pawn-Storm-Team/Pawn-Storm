@@ -3,28 +3,23 @@
 #include "interface.h"
 using namespace std;
 
-Interface(){
+Interface::Interface(){
     //make board init values
-    board.initialize();
+    //board.initialize();
     gameType = local; 
     white = black = mult = false;
     //
-
-
-    char choice = '\0';
-
+    intro();
     menu();
 }
 
-~Interface(){
-    if(board){
-        delete board;
-        board = nullptr;
-    }
+Interface::~Interface(){
+    // if(board){
+    //     delete board;
+    //     board = nullptr;
+    // }
 };
-
-int interface::intro() {
-
+void dispIntroMenu(){
     cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
     cout << "\t 1.\tPlay against a local opponent \t\t\n\n";
     cout << "\t 2.\tPlay a networked game as White \t\t\n\n";
@@ -34,19 +29,29 @@ int interface::intro() {
     cout << "\t 6.\tExit \t\t\n\n";
     cout << "\n>> ";
 
+}
+
+int Interface::intro() {
+
+    string input = string();
+    dispIntroMenu();
+
     cin >> input;
     cin.clear();
     cin.ignore();
+    if(isdigit(input[0]) && input.length() == 1){
+        int choice = stoi(input);
+        while(!(isdigit(input[0]) && input.length() == 1) { //check if input is valid - both a single character and numeric
+                cout << "\tThis input is invalid. Please enter a single digit corresponding to your desired menu choice.\n\n";
+                input.clear();
+                cout << "\n>> ";
+                cin >> input;
+                cin.clear();
+                cin.ignore();
+            }
+    }
 
-        while(!(isdigit(input[0]) && input.length() == 1 && parseInt(input[0]) >= 1  && parseInt(input[0] <=6)) { //check if input is valid - both a single character and numeric
-            cout << "\tThis input is invalid. Please enter a single digit corresponding to your desired menu choice.\n\n";
-            input.clear();
-            cout << "\n>> ";
-            cin >> input;
-            cin.clear();
-            cin.ignore();
-        }
-    int choice = parseInt(input[0]);
+
 
     switch(input[0]) {
         case '1':
@@ -67,7 +72,7 @@ int interface::intro() {
             cout << "Goodbye";
             break;
         default: 
-            cout << "."
+            cout << "Invalid Choice.";
             goto invalid_choice; //if the menu isn't selected, restart the process
     }
     return choice;
