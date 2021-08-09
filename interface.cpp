@@ -32,7 +32,7 @@ Interface::~Interface(){
 int Interface::intro() {
 
     string input = string();
-    dispIntroMenu();
+    disp_intro_menu();
 
     cin >> input;
     cin.clear();
@@ -51,6 +51,10 @@ int Interface::intro() {
     }
 
 
+    //games will be different based on local etc.
+    //in a local game, distinction between black and white is unnecessary
+    //online we would need to know who goes first
+    //ai we would need to spool up ai and have it know its white or black
     switch(input[0]) {
         case '1':
             break;
@@ -114,7 +118,6 @@ int Interface::turn_prompt(int * in){
     cout << "'s turn\n" << "Format move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
 
     string input = string();
-    bool valid = false;
 
     cin >> input;
     cin.clear();
@@ -144,7 +147,7 @@ int Interface::turn_prompt(int * in){
 
 //man this seems just so ugly
 //we're subtracting double negative from valid, so if any of these pops a "YES this DOESNT work" we get back invalid 
-bool move_format_validator(char a, char b, char c, char d){
+bool Interface::move_format_validator(char a, char b, char c, char d){
     int valid = 1;
     valid -= 0 == isdigit(a);
     valid -= 0 == isdigit(b);
@@ -157,7 +160,7 @@ bool move_format_validator(char a, char b, char c, char d){
     return valid > 0;
 }
 
-void dispIntroMenu(){
+void Interface::disp_intro_menu(){
     cout << "\t 1.\tPlay against a local opponent \t\t\n\n";
     cout << "\t 2.\tPlay a networked game as White \t\t\n\n";
     cout << "\t 3.\tPlay a networked game as Black \t\t\n\n";
@@ -165,5 +168,4 @@ void dispIntroMenu(){
     cout << "\t 5.\tPlay against the AI as Black \t\t\n\n";
     cout << "\t 6.\tExit \t\t\n\n";
     cout << "\n>> ";
-
 }
