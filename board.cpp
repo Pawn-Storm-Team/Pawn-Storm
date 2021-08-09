@@ -199,3 +199,23 @@ int chessboard::check_move(int init_rank, int init_file, int dest_rank, int dest
     return 0;//legal piece movement
 }
 
+//todo remove this placeholder
+int check_move_placeholder(int, int, int, int){
+    return 1;
+}
+//todo remove this placeholder
+
+int chessboard::make_move(int a, int b, int x, int y){
+    //if move is illegal, send error, redo turn
+    //placeholder
+    if(!check_move_placeholder(a,b,x,y)){
+        cout << "Illegal move, please try again";
+        return 1;
+    }
+
+    //todo, record taken piece
+    board[x][y] = board[a][b];
+    board[a][b] = nullptr;
+
+    return 0;
+}

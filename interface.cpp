@@ -124,6 +124,9 @@ int Interface::turn_prompt(int * in){
     cin.ignore();
 
     //todo sanitize further
+    //glaring holes
+    // - 7 digit numbers
+    // - other things I haven't thought of
     while(!move_format_validator(input[0],input[2],input[4],input[6])){
         cout << "\tThis input is invalid. Please enter only digits in a:b,x:y formatting.\n\n";
         input.clear();

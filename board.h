@@ -22,6 +22,7 @@ public:
     int get_pieces(); //returns number of pieces on board
     void draw_board();
     int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture);
+    int make_move(int,int,int,int);
 
     square board[8][8]; // initializes 8 by 8 board, first dimension is rank, second is file
 };
