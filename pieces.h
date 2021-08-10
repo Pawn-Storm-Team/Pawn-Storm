@@ -2,22 +2,16 @@
 // Created by Max Van Raden on 3/27/21.
 //
 #include <iostream>
-#include <cmath>
 
-#ifndef CHESS_CHESS_H
-#define CHESS_CHESS_H
-
-#endif //CHESS_CHESS_H
 
 using namespace std;
 
-int print();
 
-class piece {
+class Piece {
 public:
 
-    piece();
-    piece(int piece_value, bool owner, char icon);
+    Piece();
+    Piece(int piece_value, bool owner, char icon);
     int get_value();
 
     bool owner; //false black, true white
@@ -26,27 +20,27 @@ public:
     bool has_moved; //whether the piece has ever moved, important for castling
 };
 
-class pawn : public piece {
+class Pawn : public Piece {
 public:
-    explicit pawn(bool piece_owner);
+    explicit Pawn(bool piece_owner);
 };
-class knight : public piece {
+class Knight : public Piece {
 public:
-    explicit knight(bool piece_owner);
+    explicit Knight(bool piece_owner);
 };
-class bishop : public piece {
+class Bishop : public Piece {
 public:
-    explicit bishop(bool piece_owner);
+    explicit Bishop(bool piece_owner);
 };
-class rook : public piece {
+class Rook : public Piece {
 public:
-    explicit rook(bool piece_owner);
+    explicit Rook(bool piece_owner);
 };
-class queen : public piece {
+class Queen : public Piece {
 public:
-    explicit queen(bool piece_owner);
+    explicit Queen(bool piece_owner);
 };
-class king : public piece {
+class King : public Piece {
 public:
-    explicit king(bool piece_owner);
+    explicit King(bool piece_owner);
 };

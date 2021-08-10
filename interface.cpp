@@ -16,9 +16,6 @@ Interface::Interface(){
     current_turn = 0;
     game_complete = false;
     //
-
-    cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
-    intro();
     menu();
 }
 
@@ -29,6 +26,13 @@ Interface::~Interface(){
     // }
 };
 
+int Interface::menu(){
+    cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
+    //intro();
+    board.initialize();
+    action_prompt();
+    return 0;
+}
 int Interface::intro() {
 
     string input = string();
@@ -80,42 +84,33 @@ int Interface::intro() {
     return choice;
 }
 
-int Interface::menu(){
-return 0;
-}
 
 //manages the prompts each player will recieve, making it clearer who is going right now, 
 //give options for who's taken what, etc
 int Interface::action_prompt(){
-    if(game_complete){
-        cout << "Somebody Wins!";
-        return 0;
+    while(!game_complete){
+        turn_prompt();
+        ++current_turn;
+        //check if checkmate
     }
-
-
-    int check_move_placeholder = 1;
-    if(check_move_placeholder){
-
-    }
-    return 0;
+    cout << "Sombody Wins!";
+    return -1;
 }
 
-int Interface::build_local_game(){
-    return 0;
-};
-int Interface::build_online_game(){
-    return 0;
-};
-int Interface::build_vs_AI(){
-    return 0;
-};
 
-int Interface::turn_prompt(int * in){
+//turn prompting
+int Interface::turn_prompt(){
 
     //check member for who's turn it is, set string to white or black
-    if(!current_turn) cout << "White";
-    else cout << "Black";
-    cout << "'s turn\n" << "Format move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
+    if(current_turn % 2){
+     board.draw_board();
+     cout << "Black";
+    }
+    else{ 
+     board.draw_board();
+     cout << "White";
+    }
+    cout << ", turn "<< current_turn  <<"\nFormat move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
 
     string input = string();
 
@@ -124,7 +119,11 @@ int Interface::turn_prompt(int * in){
     cin.ignore();
 
     //todo sanitize further
-    while(!move_format_validator(input[0],input[2],input[4],input[6])){
+    //glaring holes
+    // - 7 digit numbers
+    // - other things I haven't thought of
+    int valid = 0;
+    while(!(valid = move_format_validator(input[0],input[2],input[4],input[6]))){
         cout << "\tThis input is invalid. Please enter only digits in a:b,x:y formatting.\n\n";
         input.clear();
         cout << "\n>> ";
@@ -133,31 +132,36 @@ int Interface::turn_prompt(int * in){
         cin.ignore();
     }
 
-    //a is origin, b is dest
-    int a_rank, a_file, b_rank, b_file;
-    a_rank = int(input[0]);
-    a_file = int(input[2]);
-    b_rank = int(input[4]);
-    b_file = int(input[6]);
-
-    //for now
-    return 0;
+    //ab is origin, xy is dest
+    //by this point we know they're numbers between 1 and 8
+    //subtractin char 1 and storing them in int will extract the numbers
+    int a, b, x, y, out;
+    a = input[0] - '1';
+    b = input[2] - '1';
+    x = input[4] - '1';
+    y = input[6] - '1';
+    return board.make_move(a,b,x,y);
 }
 
+//this here verifies that given char represents a number within our desired range
+int range_validator(char a){
+    if(isdigit(a)){
+        int b = a - '0';
+        cout << b;
+        if(b>=1 && b <=8) return 0;
+    }
+    return 1;
+}
 
-//man this seems just so ugly
+//this checks all four input values
 //we're subtracting double negative from valid, so if any of these pops a "YES this DOESNT work" we get back invalid 
-bool Interface::move_format_validator(char a, char b, char c, char d){
-    int valid = 1;
-    valid -= 0 == isdigit(a);
-    valid -= 0 == isdigit(b);
-    valid -= 0 == isdigit(c);
-    valid -= 0 == isdigit(d);
-    valid -= ( (int)a < 1 || (int)a > 8);
-    valid -= ( (int)b < 1 || (int)b > 8);
-    valid -= ( (int)c < 1 || (int)c > 8);
-    valid -= ( (int)d < 1 || (int)d > 8);
-    return valid > 0;
+bool Interface::move_format_validator(char a, char b, char x, char y){
+    int valid = 0;
+    valid -= range_validator(a);
+    valid -= range_validator(b);
+    valid -= range_validator(x);
+    valid -= range_validator(y);
+    return valid >= 0;
 }
 
 void Interface::disp_intro_menu(){
@@ -169,3 +173,13 @@ void Interface::disp_intro_menu(){
     cout << "\t 6.\tExit \t\t\n\n";
     cout << "\n>> ";
 }
+
+int Interface::build_local_game(){
+    return 0;
+};
+int Interface::build_online_game(){
+    return 0;
+};
+int Interface::build_vs_AI(){
+    return 0;
+};

@@ -14,6 +14,11 @@ square::~square() {
     }
 
 }
+//todo
+void chessboard::test_move(){
+    make_move(1,2,3,4);
+}
+
 //Adds the pieces for a standard ascii-chess game to the board
 int chessboard::initialize() { //can be used to reset or initialize the board
     for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
@@ -32,21 +37,22 @@ int chessboard::initialize() { //can be used to reset or initialize the board
             }
             if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
                 if(k == 0 || k == 7) //A1 or H1, white rooks
-                    board[i][k].piece = new rook(color);
+                    board[i][k].piece = new Rook(color);
                 if(k == 1 || k == 6) //B1 or G1, white knights
-                    board[i][k].piece = new knight(color);
+                    board[i][k].piece = new Knight(color);
                 if(k == 2 || k == 5) //C1 or F1, white bishops
-                    board[i][k].piece = new bishop(color);
+                    board[i][k].piece = new Bishop(color);
                 if(k == 3) //D1, white queen
-                    board[i][k].piece = new queen(color);
+                    board[i][k].piece = new Queen(color);
                 if(k == 4) //E1, white king
-                    board[i][k].piece = new king(color);
+                    board[i][k].piece = new King(color);
             }
             if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
-                board[i][k].piece = new pawn(color);
+                board[i][k].piece = new Pawn(color);
             }
         }
     }
+    test_move();
     return 0;
 }
 //frees memory allocated during piece creation
@@ -199,3 +205,25 @@ int chessboard::check_move(int init_rank, int init_file, int dest_rank, int dest
     return 0;//legal piece movement
 }
 
+//todo remove this placeholder
+int check_move_placeholder(int, int, int, int){
+    return 1;
+}
+//todo remove this placeholder
+
+int chessboard::make_move(int a, int b, int x, int y){
+    cout << "\nmake_move vals " << a << b << x << y << "\n";
+    //if move is illegal, send error, redo turn
+    //placeholder
+    if(!check_move_placeholder(a,b,x,y)){
+        cout << "Illegal move, please try again";
+        return 1;
+    }
+
+    //todo, record taken piece
+    //move
+    board[x][y].piece = board[a][b].piece;
+    board[a][b].piece = nullptr;
+
+    return 0;
+}
