@@ -1,2 +1,0 @@
-break board.cpp:make_move(int, int, int, int)
-break interface.cpp:138

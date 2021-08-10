@@ -52,7 +52,7 @@ int chessboard::initialize() { //can be used to reset or initialize the board
             }
         }
     }
-    test_move();
+    //test_move();
     return 0;
 }
 //frees memory allocated during piece creation
