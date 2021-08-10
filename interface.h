@@ -3,16 +3,17 @@
 //
 //
 //
-//#include "board.h"
+#include "board.h"
 
 enum GameType{ local, whiteOnline, blackOnline, whiteAI, BlackAI};
 
 
 class Interface{
-        //chessboard board;
+        chessboard board;
         GameType gameType;
         int current_turn;
         bool game_complete;
+        public:
         
 
         Interface();
@@ -27,7 +28,7 @@ class Interface{
         int build_vs_AI();
 
         int action_prompt();
-        int turn_prompt(int[]);
+        int turn_prompt();
         bool move_format_validator(char,char,char,char);
         void disp_intro_menu();
 };

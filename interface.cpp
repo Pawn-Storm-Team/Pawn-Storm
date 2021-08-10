@@ -16,9 +16,6 @@ Interface::Interface(){
     current_turn = 0;
     game_complete = false;
     //
-
-    cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
-    intro();
     menu();
 }
 
@@ -29,6 +26,12 @@ Interface::~Interface(){
     // }
 };
 
+int Interface::menu(){
+    cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
+    //intro();
+    board.initialize();
+    action_prompt();
+}
 int Interface::intro() {
 
     string input = string();
@@ -80,23 +83,15 @@ int Interface::intro() {
     return choice;
 }
 
-int Interface::menu(){
-return 0;
-}
 
 //manages the prompts each player will recieve, making it clearer who is going right now, 
 //give options for who's taken what, etc
 int Interface::action_prompt(){
-    if(game_complete){
-        cout << "Somebody Wins!";
-        return 0;
+    while(!game_complete){
+        game_complete = turn_prompt();
+        ++current_turn;
     }
-
-
-    int check_move_placeholder = 1;
-    if(check_move_placeholder){
-
-    }
+    cout << "Sombody Wins!";
     return 0;
 }
 
@@ -110,11 +105,16 @@ int Interface::build_vs_AI(){
     return 0;
 };
 
-int Interface::turn_prompt(int * in){
+int Interface::turn_prompt(){
 
     //check member for who's turn it is, set string to white or black
-    if(!current_turn) cout << "White";
-    else cout << "Black";
+    if(current_turn % 2){
+     cout << "Black";
+     board.draw_board();
+    }
+    else{ cout << "White";
+     board.draw_board();
+    }
     cout << "'s turn\n" << "Format move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
 
     string input = string();
@@ -127,7 +127,8 @@ int Interface::turn_prompt(int * in){
     //glaring holes
     // - 7 digit numbers
     // - other things I haven't thought of
-    while(!move_format_validator(input[0],input[2],input[4],input[6])){
+    int valid = 0;
+    while(!(valid = move_format_validator(input[0],input[2],input[4],input[6]))){
         cout << "\tThis input is invalid. Please enter only digits in a:b,x:y formatting.\n\n";
         input.clear();
         cout << "\n>> ";
@@ -137,30 +138,32 @@ int Interface::turn_prompt(int * in){
     }
 
     //a is origin, b is dest
-    int a_rank, a_file, b_rank, b_file;
-    a_rank = int(input[0]);
-    a_file = int(input[2]);
-    b_rank = int(input[4]);
-    b_file = int(input[6]);
-
-    //for now
-    return 0;
+    int a, b, x, y, out;
+    a = int(input[0]);
+    b = int(input[2]);
+    x = int(input[4]);
+    y = int(input[6]);
+    out = 0;
+    return board.make_move(a,b,x,y);
 }
 
+int range_validator(char a){
+    if(isdigit(a)){
+        int b = a - '0';
+        cout << b;
+        if(b>=1 && b <=8) return 0;
+    }
+    return 1;
+}
 
-//man this seems just so ugly
 //we're subtracting double negative from valid, so if any of these pops a "YES this DOESNT work" we get back invalid 
-bool Interface::move_format_validator(char a, char b, char c, char d){
-    int valid = 1;
-    valid -= 0 == isdigit(a);
-    valid -= 0 == isdigit(b);
-    valid -= 0 == isdigit(c);
-    valid -= 0 == isdigit(d);
-    valid -= ( (int)a < 1 || (int)a > 8);
-    valid -= ( (int)b < 1 || (int)b > 8);
-    valid -= ( (int)c < 1 || (int)c > 8);
-    valid -= ( (int)d < 1 || (int)d > 8);
-    return valid > 0;
+bool Interface::move_format_validator(char a, char b, char x, char y){
+    int valid = 0;
+    valid -= range_validator(a);
+    valid -= range_validator(b);
+    valid -= range_validator(x);
+    valid -= range_validator(y);
+    return valid >= 0;
 }
 
 void Interface::disp_intro_menu(){
