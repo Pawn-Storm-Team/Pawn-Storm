@@ -92,6 +92,7 @@ int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         
         }
     }
+    return 0; // valid move
 }
 int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
     if(!is_capture) { //check for non-capture conditions
@@ -112,12 +113,14 @@ int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         
         }
     }
-    
+    return 0; // valid move
 }
 int knight_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || 
     ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2)))) 
         return -3;//illegal piece movement
+    
+    return 0; // valid move
 }
 int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file) {
     int diff_rank = dest_rank - init_rank;
@@ -165,7 +168,7 @@ int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank,
             }
         }
     }
-    
+    return 0; // valid move
 }
 int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(init_file - dest_file != 0) {//if a rook moves on a file, it cannot move on a rank, and vice versa
@@ -209,6 +212,7 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
     else {
         return -3;//illegal piece movement
     }
+    return 0; // valid move
 }
 int queen_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
       int i = bishop_check(game, init_rank, init_file, dest_rank, dest_file);
@@ -221,6 +225,7 @@ int queen_check(chessboard * game, int init_rank,int init_file,int dest_rank,int
               return k;
           }
       }
+      return 0; // valid move
 }
 int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
@@ -229,7 +234,6 @@ int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
         if(init_rank - dest_rank < -1 || init_file - dest_file < -1) {
             return -3;//illegal piece movement
         }
-
-   
+    return 0; // valid move
 }
 
