@@ -1,4 +1,4 @@
-#include "check_move.h"
+#include "board.h"
 //TODO implement pin check
 //TODO implement check check
 //TODO handle en passant
@@ -236,4 +236,3 @@ int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
         }
     return 0; // valid move
 }
-
