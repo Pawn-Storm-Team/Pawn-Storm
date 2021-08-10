@@ -27,6 +27,7 @@ public:
     int make_move(int,int,int,int);
     int menu();
 
+    void test_move();
     square board[8][8]; // initializes 8 by 8 board, first dimension is rank, second is file
 };
 

@@ -238,3 +238,4 @@ int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
     return 0; // valid move
 }
 
+*/

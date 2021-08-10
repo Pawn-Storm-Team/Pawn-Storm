@@ -88,34 +88,27 @@ int Interface::intro() {
 //give options for who's taken what, etc
 int Interface::action_prompt(){
     while(!game_complete){
-        game_complete = turn_prompt();
+        turn_prompt();
         ++current_turn;
+        //check if checkmate
     }
     cout << "Sombody Wins!";
-    return 0;
+    return -1;
 }
 
-int Interface::build_local_game(){
-    return 0;
-};
-int Interface::build_online_game(){
-    return 0;
-};
-int Interface::build_vs_AI(){
-    return 0;
-};
 
 int Interface::turn_prompt(){
 
     //check member for who's turn it is, set string to white or black
     if(current_turn % 2){
+     board.draw_board();
      cout << "Black";
-     board.draw_board();
     }
-    else{ cout << "White";
+    else{ 
      board.draw_board();
+     cout << "White";
     }
-    cout << "'s turn\n" << "Format move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
+    cout << ", turn "<< current_turn  <<"\nFormat move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
 
     string input = string();
 
@@ -143,7 +136,6 @@ int Interface::turn_prompt(){
     b = int(input[2]);
     x = int(input[4]);
     y = int(input[6]);
-    out = 0;
     return board.make_move(a,b,x,y);
 }
 
@@ -175,3 +167,13 @@ void Interface::disp_intro_menu(){
     cout << "\t 6.\tExit \t\t\n\n";
     cout << "\n>> ";
 }
+
+int Interface::build_local_game(){
+    return 0;
+};
+int Interface::build_online_game(){
+    return 0;
+};
+int Interface::build_vs_AI(){
+    return 0;
+};

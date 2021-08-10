@@ -14,6 +14,11 @@ square::~square() {
     }
 
 }
+//todo
+void chessboard::test_move(){
+    make_move(1,2,3,4);
+}
+
 //Adds the pieces for a standard ascii-chess game to the board
 int chessboard::initialize() { //can be used to reset or initialize the board
     for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
@@ -47,6 +52,7 @@ int chessboard::initialize() { //can be used to reset or initialize the board
             }
         }
     }
+    test_move();
     return 0;
 }
 //frees memory allocated during piece creation
@@ -206,6 +212,7 @@ int check_move_placeholder(int, int, int, int){
 //todo remove this placeholder
 
 int chessboard::make_move(int a, int b, int x, int y){
+    cout << "\nmake_move vals " << a << b << x << y << "\n";
     //if move is illegal, send error, redo turn
     //placeholder
     if(!check_move_placeholder(a,b,x,y)){
