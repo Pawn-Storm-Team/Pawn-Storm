@@ -132,10 +132,10 @@ int Interface::turn_prompt(){
 
     //a is origin, b is dest
     int a, b, x, y, out;
-    a = int(input[0]);
-    b = int(input[2]);
-    x = int(input[4]);
-    y = int(input[6]);
+    a = input[0] - '0';
+    b = input[2] - '0';
+    x = input[4] - '0';
+    y = input[6] - '0';
     return board.make_move(a,b,x,y);
 }
 
