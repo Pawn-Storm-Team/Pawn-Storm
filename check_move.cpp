@@ -113,13 +113,57 @@ int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
     
 }
 int knight_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
-    if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2))))//Jesus christ I hope this is correct
+    if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || 
+    ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2)))) 
         return -3;//illegal piece movement
 }
 int bishop_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
-    int x = init_rank - dest_rank;
-        if(init_file - dest_file != x || init_file - dest_file != -x)
-            return -3;//illegal piece movement
+    int diff_rank = dest_rank - init_rank;
+    int diff_file = dest_file - init_file;
+    if(diff_rank != diff_file || diff_rank != -diff_file) {
+        return -3;//illegal piece movement
+    }   
+    // both positive
+    if(diff_rank > 0 && diff_file > 0) {
+        for(int i = init_rank + 1; i < dest_rank; ++i){
+            for(int k = init_file + 1; k < dest_file; ++k){
+                if(!game->board[i][k].piece) {
+                    return -6; //blocking piece
+                }
+            }
+        }
+    }
+    // rank positive, file negative
+    if(diff_rank > 0 && diff_file > 0) {
+        for(int i = init_rank + 1; i < dest_rank; ++i){
+            for(int k = init_file - 1; k > dest_file; --k){
+                if(!game->board[i][k].piece) {
+                    return -6; //blocking piece
+                }
+            }
+        }
+    }
+    // rank negative, file positive
+    if(diff_rank > 0 && diff_file > 0) {
+        for(int i = init_rank - 1; i > dest_rank; --i){
+            for(int k = init_file + 1; k < dest_file; ++k){
+                if(!game->board[i][k].piece) {
+                    return -6; //blocking piece
+                }
+            }
+        }
+    }
+    // both negative 
+    if(diff_rank > 0 && diff_file > 0) {
+        for(int i = init_rank - 1; i > dest_rank; --i){
+            for(int k = init_file - 1; k > dest_file; --k){
+                if(!game->board[i][k].piece) {
+                    return -6; //blocking piece
+                }
+            }
+        }
+    }
+    
 }
 int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(init_file - dest_file != 0) {//if a rook moves on a file, it cannot move on a rank, and vice versa
