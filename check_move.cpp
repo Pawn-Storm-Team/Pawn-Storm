@@ -1,4 +1,5 @@
-#include "board.h"
+/*
+#include "boardh"
 //TODO implement pin check
 //TODO implement check check
 //TODO handle en passant
