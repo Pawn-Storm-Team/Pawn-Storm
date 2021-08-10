@@ -117,7 +117,7 @@ int knight_check(chessboard * game, int init_rank,int init_file,int dest_rank,in
     ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2)))) 
         return -3;//illegal piece movement
 }
-int bishop_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
+int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file) {
     int diff_rank = dest_rank - init_rank;
     int diff_file = dest_file - init_file;
     if(diff_rank != diff_file || diff_rank != -diff_file) {
@@ -171,27 +171,54 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
             return -3;//illegal piece movement
         }
     }
-}
-int queen_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
-    bool legal_move = true;
-
-        //bishop component of queen movement check
-        int x = init_rank - dest_rank;
-        if (init_file - dest_file != x || init_file - dest_file != -x)
-            legal_move = false;
-
-        //rook component of queen movement check
-        if (!legal_move) {//only check the rook component if bishop component was false
-            if(init_file - dest_file != 0 && init_rank - dest_rank == 0) {
-                legal_move = true;
+    if(dest_file == init_file && dest_rank != init_rank) {
+        if(dest_rank - init_rank > 0) {
+            for(int i = init_rank + 1; i < dest_rank; ++i) {
+                if(!game->board[i][init_file].piece) {
+                    return -6; //blocking piece
                 }
-            if(!legal_move) {//only check for other direction of rook movement if necessary
-                if (init_rank - dest_rank != 0 && init_file - dest_file == 0)
-                    legal_move = true;
             }
         }
-        if(!legal_move)
-            return -3;//illegal piece movement  
+        else {
+            for(int i = init_rank - 1; i > dest_rank; --i) {
+                if(!game->board[i][init_file].piece) {
+                    return -6; //blocking piece
+                }
+            }
+        }
+
+    }
+    else if(dest_file != init_file && dest_rank == init_rank) {
+        if(dest_file - init_file > 0) {
+            for(int i = init_file + 1; i < dest_file; ++i) {
+                if(!game->board[init_rank][i].piece) {
+                    return -6; //blocking piece
+                }
+            }
+        }
+        else {
+            for(int i = init_file - 1; i > dest_file; --i) {
+                if(!game->board[init_rank][i].piece) {
+                    return -6; //blocking piece
+                }
+            }
+        }
+    }
+    else {
+        return -3;//illegal piece movement
+    }
+}
+int queen_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
+      int i = bishop_check(game, init_rank, init_file, dest_rank, dest_file);
+      if(i < 0) {
+          return i; 
+      }
+      else {
+          int k = rook_check(game, init_rank, init_file, dest_rank, dest_file);
+          if(k < 0) {
+              return k;
+          }
+      }
 }
 int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
@@ -200,6 +227,8 @@ int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
         if(init_rank - dest_rank < -1 || init_file - dest_file < -1) {
             return -3;//illegal piece movement
         }
+
+   
 }
 
 /*    
