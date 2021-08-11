@@ -50,30 +50,33 @@ King::King(bool owner) : Piece(999, owner, 'K') {
 
 
 
-int Pawn::generate_moves(vector<int[4]> moves,int a, int b){
+int Pawn::generate_moves(vector<vector<int>> moves,int a, int b){
     //dest rank, file, owernership mulitplier
     int x, y, z;
+    vector<int> out (4,-1);
+    out[0] = a;
+    out[1] = b;
 
     //flips movement based on black or white
     owner ? z = 1 : z = -1;
 
     //pawn moves forward 1
-    y = b + (1*z);
-    moves.push([a,b,x,y]);
+    out[3] = b + (1*z);
+    moves.push_back(out);
 
     //pawn moves forward 2
-    y = b + (2 * z);
-    moves.push([a,b,x,y]);
+    out[3] = b + (2 * z);
+    moves.push_back(out);
 
     //pawn take diag
-    x = a - 1;
-    y = b + (1*z);
-    moves.push([a,b,x,y]);
+    out[2] = a - 1;
+    out[3] = b + (1*z);
+    moves.push_back(out);
 
     //pawn takes other diag
-    x = a + 1;
-    y = b + (1*z);
-    moves.push([a,b,x,y]);
+    out[2] = a + 1;
+    out[3] = b + (1*z);
+    moves.push_back(out);
 
     return 0;
 };

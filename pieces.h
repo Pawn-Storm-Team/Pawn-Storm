@@ -20,7 +20,7 @@ public:
     Piece();
     Piece(int piece_value, bool owner, char icon);
     int get_value();
-    int generate_moves(vector,int,int);
+    int generate_moves(vector<vector<int>>,int,int);
 
     bool owner; //false black, true white
     const int value; //the point value of the piece
@@ -31,7 +31,7 @@ public:
 class Pawn : public Piece {
 public:
     explicit Pawn(bool piece_owner);
-    int generate_moves();
+    int generate_moves(vector<int[]>,int,int);
 };
 class Knight : public Piece {
 public:

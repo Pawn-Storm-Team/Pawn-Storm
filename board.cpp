@@ -132,23 +132,31 @@ int chessboard::make_move(int a, int b, int x, int y){
 //pass each through the move check,
 //push possible moves into vector<string> of moves,
 //if no possible moves, indicate to interface that game is complete
-int generate_moves(bool color){
+int chessboard::generate_moves(bool color){
     for(int i = 0; i < 7; ++i){
-        for(int j = 0; j < 7){
+        for(int j = 0; j < 7;++j){
 
             Piece * curr = board[i][j].piece;
-            if(curr && curr.owner == color){
+            if(curr && curr->owner == color){
 
-                vector<int[4]> moves;
-                curr.generate_moves(moves, i, j))
+                vector<vector<int>> moves;
+                curr->generate_moves(&moves, i, j);
 
-                for(int k = 0; k < moves.size();++k){
 
-                    if(check_move(moves[k],board)){
-                        legal_moves.push(moves[k]);
+                while(!moves.empty()){
+                    // move_arr[0] = (moves[moves.size()-1])[0]; 
+                    // move_arr[1] = (moves[moves.size()-1])[1]; 
+                    // move_arr[2] = (moves[moves.size()-1])[2]; 
+                    // move_arr[3] = (moves[moves.size()-1])[3]; 
+                    // if(check_move(move_vec,board)){
+                    //     legal_moves.push_back(moves.pop_back());
+                    // }
+                    vector<int> move_vec = moves.pop_back();
+                    if(check_move(&move_vec,board)){
+                        legal_moves.push_back(move_vec);
                     }
-
                 }
+
             }
         }
     }

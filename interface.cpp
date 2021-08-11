@@ -100,7 +100,7 @@ int Interface::action_prompt(){
 
 //turn prompting
 int Interface::turn_prompt(){
-    board.generate_moves(current_turn % 2)
+    board.generate_moves(current_turn % 2);
 
     //check member for who's turn it is, set string to white or black
     if(current_turn % 2){
