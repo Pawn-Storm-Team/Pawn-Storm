@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 
 #ifndef CHESS_CHESS_H
 #define CHESS_CHESS_H
