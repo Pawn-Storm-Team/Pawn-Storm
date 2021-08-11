@@ -31,7 +31,7 @@ public:
 class Pawn : public Piece {
 public:
     explicit Pawn(bool piece_owner);
-    int generate_moves(vector<int[]>,int,int);
+    int generate_moves(vector<int[]>*,int,int);
 };
 class Knight : public Piece {
 public:

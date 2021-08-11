@@ -140,18 +140,25 @@ int chessboard::generate_moves(bool color){
             if(curr && curr->owner == color){
 
                 vector<vector<int>> moves;
-                curr->generate_moves(&moves, i, j);
+                curr->generate_moves(moves, i, j);
 
 
                 while(!moves.empty()){
+                    // int move_arr[4];
                     // move_arr[0] = (moves[moves.size()-1])[0]; 
                     // move_arr[1] = (moves[moves.size()-1])[1]; 
                     // move_arr[2] = (moves[moves.size()-1])[2]; 
                     // move_arr[3] = (moves[moves.size()-1])[3]; 
-                    // if(check_move(move_vec,board)){
+                    // if(check_move(move_arr,board)){
                     //     legal_moves.push_back(moves.pop_back());
                     // }
-                    vector<int> move_vec = moves.pop_back();
+
+                    //vector<int> move_vec = moves[moves.size];
+                    // for(int l = 0; l < 4;++l){
+                    //     move_vec.push_back(moves[moves.size() -1].pop_back());
+                    // }
+                    vector<int> move_vec;
+                    copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
                     if(check_move(&move_vec,board)){
                         legal_moves.push_back(move_vec);
                     }

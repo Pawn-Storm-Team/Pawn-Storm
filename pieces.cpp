@@ -50,7 +50,7 @@ King::King(bool owner) : Piece(999, owner, 'K') {
 
 
 
-int Pawn::generate_moves(vector<vector<int>> moves,int a, int b){
+int Pawn::generate_moves(vector<vector<int>> * moves,int a, int b){
     //dest rank, file, owernership mulitplier
     int x, y, z;
     vector<int> out (4,-1);

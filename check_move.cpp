@@ -11,29 +11,29 @@
 //ERROR CODES: -1 No piece at starting square, -2 dest/init square out of bounds, -3 piece-specific move rule violation, -4 destination and initial square are the same, -5 capturing own piece, -6 path blocked by piece 
 
 int agnostic_check(square * board, int init_rank,int init_file,int dest_rank,int dest_file){
-    if(init_rank > 7 || init_rank < 0 || init_file > 7 || init_file < 0) {//the init square do exist check
-        return -2;//Out of bounds error
-    }
-    if(!(board[init_rank][init_file].piece)) {//there do be a piece check
-        return -1;//No piece error
-    }
-    if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
-        return -2;//Out of bounds error
-    }
-    if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
-        return -4;//Literally not a move error
-    }
-    //This must be the last check as it returns a 1 for captures. Any checks after this may not occur
-    if(board[dest_rank][dest_file].piece) {//there is a piece in the destination square, check for legality
-        if(board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
-            return -5; //self-capture error
-            } 
-        if(board[dest_rank][dest_file].piece->owner != game->board[init_rank][init_file].piece->owner) {//occupied by an enemy piece 
-            return 1; //this move is a capture
-        }
-    }
-    else 
-        return 0;//This move is so far legal, but not a capture
+    // if(init_rank > 7 || init_rank < 0 || init_file > 7 || init_file < 0) {//the init square do exist check
+    //     return -2;//Out of bounds error
+    // }
+    // if(!(board[init_rank][init_file].piece)) {//there do be a piece check
+    //     return -1;//No piece error
+    // }
+    // if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
+    //     return -2;//Out of bounds error
+    // }
+    // if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
+    //     return -4;//Literally not a move error
+    // }
+    // //This must be the last check as it returns a 1 for captures. Any checks after this may not occur
+    // if(board[dest_rank][dest_file].piece) {//there is a piece in the destination square, check for legality
+    //     if(board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
+    //         return -5; //self-capture error
+    //         } 
+    //     if(board[dest_rank][dest_file].piece->owner != game->board[init_rank][init_file].piece->owner) {//occupied by an enemy piece 
+    //         return 1; //this move is a capture
+    //     }
+    // }
+    // else 
+    //     return 0;//This move is so far legal, but not a capture
     return -80;//default error
 }
 
@@ -47,7 +47,7 @@ int check_move(int * move, square * board) {
 
     int a_check = agnostic_check(game,init_rank,init_file,dest_file,dest_rank);
     if(a_check < 0) return a_check;
-    char icon = board[init_rank][init_file].piece->icon;
+    char icon = (board[init_rank])[init_file].piece->icon;
     bool is_capture = false;
     if(a_check == 1)
         is_capture = true;
