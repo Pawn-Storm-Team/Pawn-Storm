@@ -1,4 +1,4 @@
-#include "board.h"
+#include "check_move.h"
 //TODO implement pin check
 //TODO implement check check
 //TODO handle en passant
@@ -34,16 +34,18 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
     }
     else 
         return 0;//This move is so far legal, but not a capture
+    return -80;//default error
 }
 
-int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, chessboard * game) {
+int check_move(int * move, square * board) {
+//int check_move(int init_rank, int init_file, int dest_rank, int dest_file, square * board) {
 
     //breaking this out
 
     int a_check = agnostic_check(game,init_rank,init_file,dest_file,dest_rank);
     if(a_check < 0) return a_check;
-    char icon = game->board[init_rank][init_file].piece->icon;
-    bool is_capture = false;
+    char icon = board[init_rank][init_file].piece->icon;
+    is_capture = false;
     if(a_check == 1)
         is_capture = true;
 
@@ -70,7 +72,7 @@ int check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool 
             return -80;//placeholder for default error
         
     }
- 
+    return -80;
 }
 //Individual piece move check functions 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
