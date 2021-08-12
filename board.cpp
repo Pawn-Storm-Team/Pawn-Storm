@@ -14,6 +14,11 @@ square::~square() {
     }
 
 }
+//todo
+void chessboard::test_move(){
+    make_move(1,2,3,4);
+}
+
 //Adds the pieces for a standard ascii-chess game to the board
 int chessboard::initialize() { //can be used to reset or initialize the board
     for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
@@ -32,21 +37,22 @@ int chessboard::initialize() { //can be used to reset or initialize the board
             }
             if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
                 if(k == 0 || k == 7) //A1 or H1, white rooks
-                    board[i][k].piece = new rook(color);
+                    board[i][k].piece = new Rook(color);
                 if(k == 1 || k == 6) //B1 or G1, white knights
-                    board[i][k].piece = new knight(color);
+                    board[i][k].piece = new Knight(color);
                 if(k == 2 || k == 5) //C1 or F1, white bishops
-                    board[i][k].piece = new bishop(color);
+                    board[i][k].piece = new Bishop(color);
                 if(k == 3) //D1, white queen
-                    board[i][k].piece = new queen(color);
+                    board[i][k].piece = new Queen(color);
                 if(k == 4) //E1, white king
-                    board[i][k].piece = new king(color);
+                    board[i][k].piece = new King(color);
             }
             if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
-                board[i][k].piece = new pawn(color);
+                board[i][k].piece = new Pawn(color);
             }
         }
     }
+    //test_move();
     return 0;
 }
 //frees memory allocated during piece creation
@@ -93,109 +99,75 @@ void chessboard::draw_board() {
     std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
     std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
 }
-//TODO implement pin check
-//TODO implement check check
-//TODO handle en passant
-//TODO handle castling
-//TODO Knight, Bishop, Rook, Queen path checking
-//WHEN PASSING TO FUNCTION REMEMBER THAT RANK IS PASSED BEFORE FILE, UNLIKE A CHESS SQUARE - C4 would be passed as [3,2] (with C being 2 and 4 being 3)
-//This function checks the legality of a move, and returns an error code depending on why the move is illegal. Moves that would capture but are not marked
-//as captures are reported as illegal.
-int chessboard::check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture) {
 
-    if(!board[init_rank][init_file].piece) {//there do be a piece check
-        return -1;//No piece error
-    }
-    if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
-        return -2;//Out of bounds error
-    }
-    if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
-        return -4;//Literally not a move error
-    }
-    if(board[dest_rank][dest_file].piece->owner == board[init_rank][init_file].piece->owner) {//occupied by same side piece check
-        return -5;//Self-capture error
-    }
-
-    //
-    //PIECE MOVEMENT RULES
-    //
-    if(board[init_rank][init_file].piece->icon == 'P') {//white pawn move rules - no capture yet
-        if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) {
-            return -3;//illegal piece movement
-        }
-        //Clear path checking
-        if(dest_rank == init_rank+2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank-1][dest_file].piece)
-                return -6;//blocking piece
-        }
-    }
-
-    if(board[init_rank][init_file].piece->icon == 'p') {//black pawn move rules - no capture yet
-        if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6))
-            return -3;//illegal piece movement
-        //clear path checking
-        if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank+1][dest_file].piece)
-                return -6;//blocking piece
-        }
-    }
-    //no path checking necessary as the horsey bois hop
-    if(board[init_rank][init_file].piece->icon == 'N' || board[init_rank][init_file].piece->icon == 'n') {//knight moves, not to be confused with Night Moves by bob seger
-        if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2))))//Jesus christ I hope this is correct
-            return -3;//illegal piece movement
-    }
-
-    if(board[init_rank][init_file].piece->icon == 'B' || board[init_rank][init_file].piece->icon == 'b') {//bishop move rules
-        int x = init_rank - dest_rank;
-        if(init_file - dest_file != x || init_file - dest_file != -x)
-            return -3;//illegal piece movement
-    }
-
-    if(board[init_rank][init_file].piece->icon == 'R' || board[init_rank][init_file].piece->icon == 'r') {//rook movement rules
-        if(init_file - dest_file != 0) {//if a rook moves on a file, it cannot move on a rank, and vice versa
-            if(init_rank - dest_rank != 0) {
-                return -3;//illegal piece movement
-            }
-        }
-
-        if(init_rank - dest_rank != 0) {
-            if (init_file - dest_file != 0) {
-                return -3;//illegal piece movement
-            }
-        }
-    }
-
-    if(board[init_rank][init_file].piece->icon == 'Q' || board[init_rank][init_file].piece->icon == 'q') {//queen move rules
-        bool legal_move = true;
-
-        //bishop component of queen movement check
-        int x = init_rank - dest_rank;
-        if (init_file - dest_file != x || init_file - dest_file != -x)
-            legal_move = false;
-
-        //rook component of queen movement check
-        if (!legal_move) {//only check the rook component if bishop component was false
-            if(init_file - dest_file != 0 && init_rank - dest_rank == 0) {
-                legal_move = true;
-                }
-            if(!legal_move) {//only check for other direction of rook movement if necessary
-                if (init_rank - dest_rank != 0 && init_file - dest_file == 0)
-                    legal_move = true;
-            }
-        }
-        if(!legal_move)
-            return -3;//illegal piece movement
-    }
-    if(board[init_rank][init_file].piece->icon == 'K' || board[init_rank][init_file].piece->icon == 'k') {//king move rules
-        if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
-            return -3;//illegal piece movement
-        }
-        if(init_rank - dest_rank < -1 || init_file - dest_file < -1) {
-            return -3;//illegal piece movement
-        }
-
-    }
-
-    return 0;//legal piece movement
+//todo remove this placeholder
+int check_move_placeholder(int, int, int, int){
+    return 1;
 }
+//todo remove this placeholder
+
+int chessboard::make_move(int a, int b, int x, int y){
+    cout << "\nmake_move vals " << a << b << x << y << "\n";
+    //if move is illegal, send error, redo turn
+    //placeholder
+    if(!check_move_placeholder(a,b,x,y)){
+        cout << "Illegal move, please try again";
+        return 1;
+    }
+
+    //todo, record taken piece
+    //move
+    board[x][y].piece = board[a][b].piece;
+    board[a][b].piece = nullptr;
+
+    return 0;
+}
+
+//interface passed color
+//generate all the moves, store in legal_move vector of strings
+//will be called every turn
+//iterate through board
+//if piece exists call generate_moves,
+//capture strings of possible moves in vector,
+//pass each through the move check,
+//push possible moves into vector<string> of moves,
+//if no possible moves, indicate to interface that game is complete
+int chessboard::generate_moves(bool color){
+    for(int i = 0; i < 7; ++i){
+        for(int j = 0; j < 7;++j){
+
+            Piece * curr = board[i][j].piece;
+            if(curr && curr->owner == color){
+
+                vector<vector<int>> moves;
+                curr->generate_moves(moves, i, j);
+
+
+                while(!moves.empty()){
+                    // int move_arr[4];
+                    // move_arr[0] = (moves[moves.size()-1])[0]; 
+                    // move_arr[1] = (moves[moves.size()-1])[1]; 
+                    // move_arr[2] = (moves[moves.size()-1])[2]; 
+                    // move_arr[3] = (moves[moves.size()-1])[3]; 
+                    // if(check_move(move_arr,board)){
+                    //     legal_moves.push_back(moves.pop_back());
+                    // }
+
+                    //vector<int> move_vec = moves[moves.size];
+                    // for(int l = 0; l < 4;++l){
+                    //     move_vec.push_back(moves[moves.size() -1].pop_back());
+                    // }
+                    vector<int> move_vec;
+                    copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
+                    if(check_move(&move_vec,board)){
+                        legal_moves.push_back(move_vec);
+                    }
+                }
+
+            }
+        }
+    }
+    return legal_moves.size();
+}
+
 

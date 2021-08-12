@@ -1,4 +1,4 @@
-#include "board.h"
+#include "check_move.h"
 //TODO implement pin check
 //TODO implement check check
 //TODO handle en passant
@@ -42,11 +42,15 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
 
 int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
 
-    //breaking this out
+
+    int init_rank = move[0];
+    int init_file = move[1];
+    int dest_rank = move[2];
+    int dest_file = move[3];
 
     int a_check = agnostic_check(game, init_rank, init_file, dest_file, dest_rank, player);
     if(a_check < 0) return a_check;
-    char icon = game->board[init_rank][init_file].piece->icon;
+    char icon = (board[init_rank])[init_file].piece->icon;
     bool is_capture = false;
     if(a_check == 1)
         is_capture = true;
@@ -74,7 +78,7 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
             return -80;//placeholder for default error
         
     }
- 
+    return -80;
 }
 /*
 int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
@@ -253,6 +257,7 @@ int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
             return -3;//illegal piece movement
         }
     return 0; // valid move
+
 }
 
 //
@@ -513,4 +518,5 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
           if(inCheck) {
               return -8; //The king is in check
           }
+
 }
