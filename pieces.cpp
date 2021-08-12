@@ -157,18 +157,22 @@ int Rook::generate_moves(vector<vector<int>> *& moves,int a, int b) {
     for(int i = a+1; i <=7; ++i) {
         out[2] = i;
         out[3] = b;
+        moves->push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = i;
         out[3] = b;
+        moves->push_back(out);
     }
     for(int i = b+1; i <=7; ++i) {
         out[2] = a;
         out[3] = i;
+        moves->push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = a;
         out[3] = i;
+        moves->push_back(out);
     }
     return 0;
 
@@ -207,20 +211,33 @@ int Queen::generate_moves(vector<vector<int>> *& moves,int a, int b){
     for(int i = a+1; i <=7; ++i) {
         out[2] = i;
         out[3] = b;
+        moves->push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = i;
         out[3] = b;
+        moves->push_back(out);
     }
     for(int i = b+1; i <=7; ++i) {
         out[2] = a;
         out[3] = i;
+        moves->push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = a;
         out[3] = i;
+        moves->push_back(out);
     }
     return 0;
 };
-int King::generate_moves(vector<vector<int>> *& moves,int a, int b){};
+int King::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+    vector<int> out (4,-1);
+    out[0] = a;
+    out[1] = b;
+
+    out[2] = a+1;
+    out[3] = b;
+
+
+};
 
