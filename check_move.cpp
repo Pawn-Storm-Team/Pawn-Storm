@@ -76,6 +76,7 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
     }
  
 }
+/*
 int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
     int king_rank = -1;
     int king_file = -1; 
@@ -88,6 +89,7 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
         is_king = 1;
     }
 }
+*/
 //Individual piece move check functions 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
     if(!is_capture) {
