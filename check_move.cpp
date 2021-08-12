@@ -8,44 +8,47 @@
 //This function checks the legality of a move, and returns an error code depending on why the move is illegal. Moves that would capture but are not marked
 //as captures are reported as illegal.
 //RETURN CODES: 0 Standard Move, 1 Capture, 2 En Passant Capture
-//ERROR CODES: -1 No piece at starting square, -2 dest/init square out of bounds, -3 piece-specific move rule violation, -4 destination and initial square are the same, -5 capturing own piece, -6 path blocked by piece 
+//ERROR CODES: -1 No piece at starting square, -2 dest/init square out of bounds, -3 piece-specific move rule violation, 
+//-4 destination and initial square are the same, -5 capturing own piece, -6 path blocked by piece, -7 trying to move the other player's piece 
 
-int agnostic_check(square * board, int init_rank,int init_file,int dest_rank,int dest_file){
-    // if(init_rank > 7 || init_rank < 0 || init_file > 7 || init_file < 0) {//the init square do exist check
-    //     return -2;//Out of bounds error
-    // }
-    // if(!(board[init_rank][init_file].piece)) {//there do be a piece check
-    //     return -1;//No piece error
-    // }
-    // if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
-    //     return -2;//Out of bounds error
-    // }
-    // if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
-    //     return -4;//Literally not a move error
-    // }
-    // //This must be the last check as it returns a 1 for captures. Any checks after this may not occur
-    // if(board[dest_rank][dest_file].piece) {//there is a piece in the destination square, check for legality
-    //     if(board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
-    //         return -5; //self-capture error
-    //         } 
-    //     if(board[dest_rank][dest_file].piece->owner != game->board[init_rank][init_file].piece->owner) {//occupied by an enemy piece 
-    //         return 1; //this move is a capture
-    //     }
-    // }
-    // else 
-    //     return 0;//This move is so far legal, but not a capture
-    return -80;//default error
+int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool player){
+    if(init_rank > 7 || init_rank < 0 || init_file > 7 || init_file < 0) {//the init square do exist check
+        return -2;//Out of bounds error
+    }
+    if(!(game->board[init_rank][init_file].piece)) {//there do be a piece check
+        return -1;//No piece error
+    }
+    if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
+        return -2;//Out of bounds error
+    }
+    if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
+        return -4;//Literally not a move error
+    }
+    if(game->board[init_rank][init_file].piece->owner != player) {
+        return -7; //cannot move other players piece
+    }
+    //This must be the last check as it returns a 1 for captures. Any checks after this may not occur
+    if(game->board[dest_rank][dest_file].piece) {//there is a piece in the destination square, check for legality
+        if(game->board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
+            return -5; //self-capture error
+            } 
+        if(game->board[dest_rank][dest_file].piece->owner != game->board[init_rank][init_file].piece->owner) {//occupied by an enemy piece 
+            return 1; //this move is a capture
+        }
+    }
+    else 
+        return 0;//This move is so far legal, but not a capture
 }
 
-int check_move(int * move, square * board) {
-//int check_move(int init_rank, int init_file, int dest_rank, int dest_file, square * board) {
+int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
+
 
     int init_rank = move[0];
     int init_file = move[1];
     int dest_rank = move[2];
     int dest_file = move[3];
 
-    int a_check = agnostic_check(game,init_rank,init_file,dest_file,dest_rank);
+    int a_check = agnostic_check(game, init_rank, init_file, dest_file, dest_rank, player);
     if(a_check < 0) return a_check;
     char icon = (board[init_rank])[init_file].piece->icon;
     bool is_capture = false;
@@ -77,6 +80,20 @@ int check_move(int * move, square * board) {
     }
     return -80;
 }
+/*
+int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
+    int king_rank = -1;
+    int king_file = -1; 
+    int is_king = 0; //if the king is the piece moving, we can just check the destination square without "moving" pieces to see if the king would be in check
+    int in_check = 0; //This flag is used to track if the king is in check so that the temporary movement can be undone
+
+    if(game->board[init_rank][init_file].piece->icon == 'k' || game->board[init_rank][init_file].piece->icon == 'K') {
+        king_rank = dest_rank;
+        king_file = dest_file; 
+        is_king = 1;
+    }
+}
+*/
 //Individual piece move check functions 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
     if(!is_capture) {
@@ -240,4 +257,266 @@ int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
             return -3;//illegal piece movement
         }
     return 0; // valid move
+
+}
+
+//
+//Function to determine whether the move would put the same-side king in check
+
+
+
+
+//Max Van Raden
+//TEST to see if I can directly convert the Java version instead of rewriting it
+//This function was originally written in Java by me for a separate project, and was translated to C++ for use in this project, it is wholly my original work
+int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
+    int king_rank = -1;
+          int king_file = -1;
+          int isKing = 0;
+          int inCheck = 0; //tracks whether or not the king is in check, needed because the board is set to a temporary state and returning early would prevent me from correcting that
+          piece * temp = NULL;
+          piece * temp2 = NULL;
+          if(toupper(game->board[init_rank][init_file].piece->icon) == 'K'){
+              king_rank = dest_rank;
+              king_file = dest_file;
+              isKing = 1;
+          }
+          else{
+            for(int i = 0; i < 8; i++) { //Step one, locate the same side king by iterating through board
+                for(int k = 0; k < 8; k++) {
+                    if(game->board[i][k].piece != NULL){
+                        if((toupper(toupper(game->board[i][k].piece->icon) == 'K')) && game->board[i][k].piece->owner == player) { //locate same side king 
+                            king_rank = i;
+                            king_file = k; 
+                            break;       
+                        }
+                    }
+                }
+                if(king_file != -1) {//stop looping once king is found
+                    break;
+                }
+            }
+          }
+          if(!isKing) { //move the pieces temporarily so that we can check the proposed board state to see if the king is still in check
+            temp =  game->board[init_rank][init_file].piece;
+            temp2 = game->board[dest_rank][dest_file].piece;
+            game->board[dest_rank][dest_file].piece = NULL;
+            game->board[dest_rank][dest_file].piece = game->board[init_rank][init_file].piece;
+            game->board[init_rank][init_file].piece = NULL;
+          }
+
+          //check for knights, includes checks for out of bounds and existing pieces to prevent NULL dereferences
+          if(king_rank+2 <= 7 && king_file+1 <= 7 ) {
+            if(game->board[king_rank+2][king_file+1].piece != NULL && toupper(game->board[king_rank+2][king_file+1].piece->icon) == 'N' && game->board[king_rank+2][king_file+1].piece->owner != player) {
+                inCheck = 1; //king is in check
+            }
+          }   
+          if(king_rank+2 <= 7 && king_file-1 >= 0 ) {
+             if(game->board[king_rank+2][king_file-1].piece != NULL && toupper(game->board[king_rank+2][king_file-1].piece->icon) == 'N' && game->board[king_rank+2][king_file-1].piece->owner != player) {
+                inCheck = 1; //king is in check
+             }
+          }
+          if(king_rank-2 >= 0 && king_file+1 <= 7) { 
+             if(game->board[king_rank-2][king_file+1].piece != NULL && toupper(game->board[king_rank-2][king_file+1].piece->icon) == 'N' && game->board[king_rank-2][king_file+1].piece->owner != player) {
+                inCheck = 1; //king is in check
+             }
+          }
+          if(king_rank-2 >= 0 && king_file-1 >= 0 ) {
+            if(game->board[king_rank-2][king_file-1].piece != NULL && toupper(game->board[king_rank-2][king_file-1].piece->icon) == 'N' && game->board[king_rank-2][king_file-1].piece->owner != player) {
+                 inCheck = 1; //king is in check
+            }
+          }
+          if(king_rank+1 <= 7 && king_file+2 <= 7) {
+            if(game->board[king_rank+1][king_file+2].piece != NULL && toupper(game->board[king_rank+1][king_file+2].piece->icon) == 'N' && game->board[king_rank+1][king_file+2].piece->owner != player) {
+                inCheck = 1; //king is in check
+            }
+          }
+          if(king_rank+1 <= 7 && king_file-2 >= 0 ) {
+            if(game->board[king_rank+1][king_file-2].piece != NULL && toupper(game->board[king_rank+1][king_file-2].piece->icon) == 'N' && game->board[king_rank+1][king_file-2].piece->owner != player) {
+                inCheck = 1; //king is in check
+            }
+          }
+          if(king_rank-1 >= 0 && king_file+2 <= 7 ) {
+            if(game->board[king_rank-1][king_file+2].piece != NULL && toupper(game->board[king_rank-1][king_file+2].piece->icon) == 'N' && game->board[king_rank-1][king_file+2].piece->owner != player) {
+                  inCheck = 1; //king is in check
+            }
+          } 
+          if(king_rank-1 >= 0 && king_file-2 >= 0 ) {
+            if(game->board[king_rank-1][king_file-2].piece != NULL && toupper(game->board[king_rank-1][king_file-2].piece->icon) == 'N' && game->board[king_rank-1][king_file-2].piece->owner != player) {
+                inCheck = 1; //king is in check
+            }
+          }
+          
+
+          //check the rank and file directions (horizontal and vertical lines for check threats)
+          for(int i = king_rank+1; i < 8; ++i) {
+              if(game->board[i][king_file].piece != NULL) {
+                  if((toupper(game->board[i][king_file].piece->icon) == 'R' || toupper(game->board[i][king_file].piece->icon) == 'Q') && game->board[i][king_file].piece->owner != player) {
+                      inCheck = 1; //king is in check 
+                  }
+                  else {//king is not in check in this direction
+                      break;
+                  }
+              }
+          }
+          for(int i = king_rank-1; i >= 0; --i) {
+              if(game->board[i][king_file].piece != NULL) {
+                  if((toupper(game->board[i][king_file].piece->icon) == 'R' || toupper(game->board[i][king_file].piece->icon) == 'Q') && game->board[i][king_file].piece->owner != player) {
+                      inCheck = 1; //king is in check 
+                  }
+                  else {//king is not in check in this direction
+                      break;
+                  }
+              }
+          }
+          for(int i = king_file+1; i < 8; ++i) {
+              if(game->board[king_rank][i].piece != NULL) {
+                  if((toupper(game->board[king_rank][i].piece->icon) == 'R' || toupper(game->board[king_rank][i].piece->icon) == 'Q') && game->board[king_rank][i].piece->owner != player) {
+                      inCheck = 1; //king is in check 
+                  }
+                  else {//king is not in check in this direction
+                      break;
+                  }
+              }
+          }
+          for(int i = king_file-1; i >= 0; --i) {
+              if(game->board[king_rank][i].piece != NULL) {
+                  if((toupper(game->board[king_rank][i].piece->icon) == 'R' || toupper(game->board[king_rank][i].piece->icon) == 'Q') && game->board[king_rank][i].piece->owner != player) {
+                      inCheck = 1; //king is in check 
+                  }
+                  else {//king is not in check in this direction
+                      break;
+                  }
+              }
+          }
+
+          //Check the diagonals 
+          for(int i = king_rank+1; i < 8; ++i){
+              int notSafe = 1;
+              for(int k = king_file+1; k < 8; ++k) {
+                  if(abs(king_rank - i) == abs(king_file - k)){
+                    if(game->board[i][k].piece != NULL) {
+                      if((toupper(toupper(game->board[i][k].piece->icon)) == 'B' || toupper(toupper(game->board[i][k].piece->icon)) == 'Q') && game->board[i][k].piece->owner != player) {
+                        inCheck = 1; //king is in check 
+                      }
+                      //black pawn check
+                      else if(toupper(toupper(game->board[i][k].piece->icon)) == 'P' && game->board[i][k].piece->owner != player && player == true && i == king_rank+1 && (k == king_file+1 || k == king_file-1)) {
+                        inCheck = 1; //king is in check
+                      }
+                      //white pawn check
+                      else if(toupper(game->board[i][k].piece->icon) == 'P' && game->board[i][k].piece->owner != player && player == false && i == king_rank-1 && (k == king_file+1 || k == king_file-1)) {
+                        inCheck = 1; //king is in check
+                      }
+                      else {//king is not in check in this direction
+                          notSafe = 0;
+                          break;
+                      }
+                  }
+                }
+              }
+              if(notSafe == 0) {
+                  break;
+              }
+          }
+          for(int i = king_rank-1; i >= 0; --i){
+            int notSafe = 1;
+              for(int k = king_file+1; k < 8; ++k) {
+                if(abs(king_rank - i) == abs(king_file - k)){
+                  if(game->board[i][k].piece != NULL ) {
+                      if((toupper(game->board[i][k].piece->icon) == 'B' || toupper(game->board[i][k].piece->icon) == 'Q') && game->board[i][k].piece->owner != player) {
+                          inCheck = 1; //king is in check 
+                      }
+                      //black pawn check
+                      else if(toupper(game->board[i][k].piece->icon) == 'P' && game->board[i][k].piece->owner != player && player == true && i == king_rank+1 && (k == king_file+1 || k == king_file-1)) {
+                          inCheck = 1; //king is in check
+                      }
+                      //white pawn check
+                      else if(toupper(game->board[i][k].piece->icon) == 'P' && game->board[i][k].piece->owner != player && player == false && i == king_rank-1 && (k == king_file+1 || k == king_file-1)) {
+                          inCheck = 1; //king is in check
+                      }
+                      else {//king is not in check in this direction
+                          notSafe = 0;
+                          break;
+                      }
+                  }
+                }
+              }
+              if(notSafe == 0) {
+                break;
+              }
+          }
+          for(int i = king_rank+1; i < 8; ++i){
+            int notSafe = 1;
+              for(int k = king_file-1; k >= 0; --k) {
+                if(abs(king_rank - i) == abs(king_file - k)){
+                  if(game->board[i][k].piece != NULL) {
+                      if((toupper(game->board[i][k].piece->icon) == 'B' || toupper(game->board[i][k].piece->icon) == 'Q') && game->board[i][k].piece->owner != player) {
+                          inCheck = 1; //king is in check 
+                      }
+                      //black pawn check
+                      else if(toupper(game->board[i][k].piece->icon) == 'P' && game->board[i][k].piece->owner != player && player == true && i == king_rank+1 && (k == king_file+1 || k == king_file-1)) {
+                          inCheck = 1; //king is in check
+                      }
+                      //white pawn check
+                      else if(toupper(game->board[i][k].piece->icon) == 'P' && game->board[i][k].piece->owner != player && player == false && i == king_rank-1 && (k == king_file+1 || k == king_file-1)) {
+                          inCheck = 1; //king is in check
+                      }
+                      else {//king is not in check in this direction
+                        notSafe = 0;  
+                        break;
+                      }
+                  }
+                }
+              }
+              if(notSafe == 0) {
+                break;
+              }
+          }
+          for(int i = king_rank-1; i >= 0; --i){
+            int notSafe = 1;
+              for(int k = king_file-1; k >= 0; --k) {
+                if(abs(king_rank - i) == abs(king_file - k)){
+                  if(game->board[i][k].piece != NULL) {
+                      if((toupper(game->board[i][k].piece->icon) == 'B' || toupper(game->board[i][k].piece->icon) == 'Q') && game->board[i][k].piece->owner != player) {
+                          inCheck = 1; //king is in check 
+                      }
+                      //black pawn check
+                      else if(toupper(game->board[i][k].piece->icon) == 'P' && game->board[i][k].piece->owner != player && player == true && i == king_rank+1 && (k == king_file+1 || k == king_file-1)) {
+                          inCheck = 1; //king is in check
+                      }
+                      //white pawn check
+                      else if(toupper(game->board[i][k].piece->icon) == 'P' && game->board[i][k].piece->owner != player && player == false && i == king_rank-1 && (k == king_file+1 || k == king_file-1)) {
+                          inCheck = 1; //king is in check
+                      }
+                      else {//king is not in check in this direction
+                        notSafe = 0;  
+                        break;
+                      }
+                  }
+                }
+              }
+              if(notSafe == 0) {
+                break;
+              }
+          }
+          //Check for the other king putting the king in check - super gross but frankly not where I want to spend my time right now
+          if((king_rank+1 <= 7 && king_file+1 <= 7 && game->board[king_rank+1][king_file+1].piece && toupper(game->board[king_rank+1][king_file+1].piece->icon) == 'K' && game->board[king_rank+1][king_file+1].piece->owner != player) ||
+             (king_rank+1 <= 7 && king_file-1 >= 0 && game->board[king_rank+1][king_file-1].piece && toupper(game->board[king_rank+1][king_file-1].piece->icon) == 'K' && game->board[king_rank+1][king_file-1].piece->owner != player) ||
+             (king_rank+1 <= 7 && game->board[king_rank+1][king_file].piece && toupper(game->board[king_rank+1][king_file].piece->icon) == 'K' && game->board[king_rank+1][king_file].piece->owner != player) ||
+             (king_rank-1 >= 0 && game->board[king_rank-1][king_file].piece && toupper(game->board[king_rank-1][king_file].piece->icon) == 'K' && game->board[king_rank-1][king_file].piece->owner != player) ||
+             (king_rank-1 >= 0 && king_file+1 <= 7 && game->board[king_rank-1][king_file+1].piece && toupper(game->board[king_rank-1][king_file+1].piece->icon) == 'K' && game->board[king_rank-1][king_file+1].piece->owner != player) ||
+             (king_rank-1 >= 0 && king_file-1 >= 0 && game->board[king_rank-1][king_file-1].piece && toupper(game->board[king_rank-1][king_file-1].piece->icon) == 'K' && game->board[king_rank-1][king_file-1].piece->owner != player) ||
+             (king_file+1 <= 7 && game->board[king_rank][king_file+1].piece && toupper(game->board[king_rank][king_file+1].piece->icon) == 'K' && game->board[king_rank][king_file+1].piece->owner != player) || 
+             (king_file-1 >= 0 && game->board[king_rank][king_file-1].piece && toupper(game->board[king_rank][king_file-1].piece->icon) == 'K' && game->board[king_rank][king_file-1].piece->owner != player)) {
+                 inCheck = 1;
+             }
+          //reset board to original position
+          if(!isKing) {
+            game->board[init_rank][init_file].piece = temp;
+            game->board[dest_rank][dest_file].piece = temp2;
+          }
+          if(inCheck) {
+              return -8; //The king is in check
+          }
+
 }
