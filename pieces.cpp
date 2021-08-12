@@ -237,7 +237,36 @@ int King::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 
     out[2] = a+1;
     out[3] = b;
+    moves->push_back(out);
 
+    out[2] = a+1;
+    out[3] = b+1;
+    moves->push_back(out);
 
+    out[2] = a-1;
+    out[3] = b;
+    moves->push_back(out);
+
+    out[2] = a-1;
+    out[3] = b+1;
+    moves->push_back(out);
+
+    out[2] = a-1;
+    out[3] = b-1;
+    moves->push_back(out);
+
+    out[2] = a+1;
+    out[3] = b-1;
+    moves->push_back(out);
+
+    out[2] = a;
+    out[3] = b+1;
+    moves->push_back(out);
+
+    out[2] = a;
+    out[3] = b-1;
+    moves->push_back(out);
+
+    return 0;
 };
 
