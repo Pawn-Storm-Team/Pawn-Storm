@@ -2,7 +2,7 @@
 // Created by Max Van Raden on 3/27/21.
 //
 #include "board.h"
-
+#include "check_move.h"
 square::square() {
     piece = nullptr;
 }
@@ -132,7 +132,7 @@ int chessboard::make_move(int a, int b, int x, int y){
 //pass each through the move check,
 //push possible moves into vector<string> of moves,
 //if no possible moves, indicate to interface that game is complete
-int chessboard::generate_moves(bool color){
+int chessboard::gen_moves(bool color, chessboard * game){
     for(int i = 0; i < 7; ++i){
         for(int j = 0; j < 7;++j){
 
@@ -144,22 +144,9 @@ int chessboard::generate_moves(bool color){
 
 
                 while(!moves.empty()){
-                    // int move_arr[4];
-                    // move_arr[0] = (moves[moves.size()-1])[0]; 
-                    // move_arr[1] = (moves[moves.size()-1])[1]; 
-                    // move_arr[2] = (moves[moves.size()-1])[2]; 
-                    // move_arr[3] = (moves[moves.size()-1])[3]; 
-                    // if(check_move(move_arr,board)){
-                    //     legal_moves.push_back(moves.pop_back());
-                    // }
-
-                    //vector<int> move_vec = moves[moves.size];
-                    // for(int l = 0; l < 4;++l){
-                    //     move_vec.push_back(moves[moves.size() -1].pop_back());
-                    // }
                     vector<int> move_vec;
                     copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
-                    if(check_move(&move_vec,board)){
+                    if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],color)){
                         legal_moves.push_back(move_vec);
                     }
                 }

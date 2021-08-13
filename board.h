@@ -10,6 +10,7 @@
 
 #endif //CHESS_BOARD_H
 
+
 class square {
 public:
     square();
@@ -28,7 +29,7 @@ public:
 
     int make_move(int,int,int,int);
     int menu();
-    int generate_moves(bool);//generates all legal moves, returns 1 if no legal moves
+    int gen_moves(bool, chessboard *);//generates all legal moves, returns 1 if no legal moves
     void test_move();
     square board[8][8]; // initializes 8 by 8 board, first dimension is rank, second is file
 

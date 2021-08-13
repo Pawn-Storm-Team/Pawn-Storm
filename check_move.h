@@ -1,7 +1,7 @@
-#include "board.h"
-#include <vector>
+//forward declaration of chessboard
+class chessboard;
 
-int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player);
+int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool player);
 int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool player);
 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file,bool is_capture);
