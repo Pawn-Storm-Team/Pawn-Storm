@@ -146,10 +146,11 @@ int chessboard::gen_moves(bool color, chessboard * game){
 
 
                 while(!moves.empty()){
-                    vector<int> move_vec;
+                    vector<int> move_vec (4,-1);
                     copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
                     if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],color)){
                         legal_moves.push_back(move_vec);
+                        moves.pop_back();
                     }
                 }
 
