@@ -16,10 +16,6 @@ square::~square() {
     }
 
 }
-//todo
-void chessboard::test_move(){
-    make_move(1,2,3,4);
-}
 
 //Adds the pieces for a standard ascii-chess game to the board
 int chessboard::initialize() { //can be used to reset or initialize the board
@@ -102,17 +98,12 @@ void chessboard::draw_board() {
     std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
 }
 
-//todo remove this placeholder
-int check_move_placeholder(int, int, int, int){
-    return 1;
-}
-//todo remove this placeholder
 
-int chessboard::make_move(int a, int b, int x, int y){
+int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool color){
     cout << "\nmake_move vals " << a << b << x << y << "\n";
     //if move is illegal, send error, redo turn
     //placeholder
-    if(!check_move_placeholder(a,b,x,y)){
+    if(!check_move(game,a,b,x,y,color)){
         cout << "Illegal move, please try again";
         return 1;
     }
@@ -134,7 +125,7 @@ int chessboard::make_move(int a, int b, int x, int y){
 //pass each through the move check,
 //push possible moves into vector<string> of moves,
 //if no possible moves, indicate to interface that game is complete
-int chessboard::gen_moves(bool color, chessboard * game){
+bool chessboard::gen_moves(bool color, chessboard * game){
     for(int i = 0; i < 7; ++i){
         for(int j = 0; j < 7;++j){
 
@@ -157,7 +148,7 @@ int chessboard::gen_moves(bool color, chessboard * game){
             }
         }
     }
-    return legal_moves.size();
+    return legal_moves.empty();
 }
 
 

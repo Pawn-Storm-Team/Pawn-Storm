@@ -27,11 +27,12 @@ public:
     int get_pieces(); //returns number of pieces on board
     void draw_board();
 
-    int make_move(int,int,int,int);
+    int make_move(chessboard *,int,int,int,int,bool);
     int menu();
-    int gen_moves(bool, chessboard *);//generates all legal moves, returns 1 if no legal moves
+    bool gen_moves(bool, chessboard *);//generates all legal moves, returns 1 if no legal moves
     void test_move();
     square board[8][8]; // initializes 8 by 8 board, first dimension is rank, second is file
+    int last_move [4] = {-1, -1, -1, -1};
 
 };
 
