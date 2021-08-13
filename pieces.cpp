@@ -51,7 +51,8 @@ King::King(bool owner) : Piece(999, owner, 'K') {
 
 
 
-int Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == init rank, b == init file
+void Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == init rank, b == init file
+// int Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == init rank, b == init file
     
     int z; //used to modify function for black/white
     vector<int> out (4,-1);
@@ -81,9 +82,9 @@ int Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == ini
     out[2] = a + (1*z);
     moves->push_back(out);
 
-    return 0;
+    // return 0;
 };
-int Bishop::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void Bishop::generate_moves(vector<vector<int>> *& moves,int a, int b) {
     
 //     vector<int> out (4,-1);
 //     out[0] = a;
@@ -109,9 +110,9 @@ int Bishop::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 //         out[3] = j;
 //         moves->push_back(out);
 //     }
-    return 0;
+    // return 0;
 };
-int Knight::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void Knight::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 //     vector<int> out (4,-1);
 //     out[0] = a;
 //     out[1] = b;
@@ -148,9 +149,9 @@ int Knight::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 //     out[3] = b-2;
 //     moves->push_back(out);
 
-    return 0;
+    // return 0;
 };
-int Rook::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void Rook::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 //     vector<int> out (4,-1);
 //     out[0] = a;
 //     out[1] = b;
@@ -175,10 +176,10 @@ int Rook::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 //         out[3] = i;
 //         moves->push_back(out);
 //     }
-    return 0;
+    // return 0;
 
 };
-int Queen::generate_moves(vector<vector<int>> *& moves,int a, int b){
+void Queen::generate_moves(vector<vector<int>> *& moves,int a, int b){
 //     //Code of rook and bishop combined 
     
 //     vector<int> out (4,-1);
@@ -229,9 +230,9 @@ int Queen::generate_moves(vector<vector<int>> *& moves,int a, int b){
 //         out[3] = i;
 //         moves->push_back(out);
 //     }
-    return 0;
+    // return 0;
 };
-int King::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void King::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 //     vector<int> out (4,-1);
 //     out[0] = a;
 //     out[1] = b;
@@ -268,6 +269,6 @@ int King::generate_moves(vector<vector<int>> *& moves,int a, int b) {
 //     out[3] = b-1;
 //     moves->push_back(out);
 
-    return 0;
+    // return 0;
 };
 
