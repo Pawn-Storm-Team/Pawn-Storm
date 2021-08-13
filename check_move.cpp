@@ -33,13 +33,12 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
         if(game->board[dest_rank][dest_file].piece->owner == game->board[init_rank][init_file].piece->owner) {//occupied by same side piece check
             return -5; //self-capture error
             } 
-        if(game->board[dest_rank][dest_file].piece->owner != game->board[init_rank][init_file].piece->owner) {//occupied by an enemy piece 
+        else {//occupied by an enemy piece 
             return 1; //this move is a capture
         }
     }
     else 
         return 0;//This move is so far legal, but not a capture
-    return -80;// generic error
 }
 
 int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool player) {
@@ -61,8 +60,8 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
     int result;
     switch(toupper(icon)){
         case 'P':
-            if(icon == 'p') result = black_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture);
-            else result = white_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture);
+            if(icon == 'p') result = black_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture, player);
+            else result = white_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture, player);
             break;
         case 'N':
             result = knight_check(game, init_rank, init_file, dest_rank, dest_file);
@@ -97,47 +96,104 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
 }
 */
 //Individual piece move check functions 
-int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
+int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {
+    int legality = 0;
     if(!is_capture) {
         if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) { //moving one or two squares, checking for correct rank for moving two
-          return -3; //illegal piece movement
+          legality = -3; //illegal piece movement
           }
             //Clear path checking
-            if(dest_rank == init_rank+2) { //check for a blocking piece on the skipped square when moving two squares
-                if(game->board[dest_rank-1][dest_file].piece)
-                    return -6; //blocking piece
-            }
+        if(dest_rank == init_rank+2) { //check for a blocking piece on the skipped square when moving two squares
+            if(game->board[dest_rank-1][dest_file].piece)
+                legality = -6; //blocking piece
+        }
+        //En Passant capture check section - in this section because the ag check will not determine that this move is a capture due to an empty destination square 
+        //En Passant check - to the right
+        if(dest_file == init_file+1 && //correct file for en passant right
+        dest_rank == init_rank-1 && //moved one square down the board 
+        !game->board[init_rank-1][init_file+1].piece && // the destination square is empty
+        game->board[init_rank][init_file+1].piece && // there is a piece directly to the right of the moving pawn
+        game->board[init_rank][init_file+1].piece->owner != player && // it is not owned by the player
+        toupper(game->board[init_rank][init_file+1].piece->icon) == 'P' && // it is also a pawn
+        game->last_move[0]+2 == game->last_move[2] && //white piece moved two squares up last move
+        game->last_move[2] == init_rank && game->last_move[3] == init_file+1 //The last move ended on the coordinates directly adjacent to the moving pawn
+        ) {
+            legality = 2; // valid en passant capture, will require special handling
+        }
+        //En passant check - to the left
+        else if(dest_file == init_file-1 && //correct file for en passant left
+        dest_rank == init_rank-1 && //moved one square down the board 
+        !game->board[init_rank-1][init_file-1].piece && // the destination square is empty
+        game->board[init_rank][init_file-1].piece && // there is a piece directly to the left of the moving pawn
+        game->board[init_rank][init_file-1].piece->owner != player && // it is not owned by the player
+        toupper(game->board[init_rank][init_file-1].piece->icon) == 'P' && // it is also a pawn
+        game->last_move[0]+2 == game->last_move[2] && //White piece moved two squares up last move
+        game->last_move[2] == init_rank && game->last_move[3] == init_file-1 //The last move ended on the coordinates directly adjacent to the moving pawn
+        ) {
+            legality = 2; // valid en passant capture, will require special handling
+        }
+        else {
+            legality = -3; //illegal piece movement 
+        }
     }
     else { //check for capture conditions
         if(dest_rank != init_rank+1) { 
             if(dest_file != init_file+1 && dest_file != init_file-1) {
-                return -3; //illegal piece movement 
+                legality = -3; //illegal piece movement 
             }
-        
         }
     }
-    return 0; // valid move
+    return legality; // valid move
 }
-int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture) {
-    if(!is_capture) { //check for non-capture conditions
+int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {\
+    int legality = 0;
+    if(!is_capture) { //check for non-capture conditions and en passant 
         if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6)) {
-            return -3;//illegal piece movement
+            legality = -3;//illegal piece movement
             //clear path checking
             if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
                 if(game->board[dest_rank+1][dest_file].piece)
-                    return -6;//blocking piece
+                   legality = -6;//blocking piece
             }
+        }
+        //En Passant capture check section - in this section because the ag check will not determine that this move is a capture due to an empty destination square 
+        //En Passant check - to the right
+        if(dest_file == init_file+1 && //correct file for en passant right
+        dest_rank == init_rank+1 && //moved one square up the board 
+        !game->board[init_rank+1][init_file+1].piece && // the destination square is empty
+        game->board[init_rank][init_file+1].piece && // there is a piece directly to the right of the moving pawn
+        game->board[init_rank][init_file+1].piece->owner != player && // it is not owned by the player
+        toupper(game->board[init_rank][init_file+1].piece->icon) == 'P' && // it is also a pawn
+        game->last_move[0]-2 == game->last_move[2] && //Black piece moved two squares down last move
+        game->last_move[2] == init_rank && game->last_move[3] == init_file+1 //The last move ended on the coordinates directly adjacent to the moving pawn
+        ) {
+            legality = 2; // valid en passant capture, will require special handling
+        }
+        //En passant check - to the left
+        else if(dest_file == init_file-1 && //correct file for en passant left
+        dest_rank == init_rank+1 && //moved one square up the board 
+        !game->board[init_rank+1][init_file-1].piece && // the destination square is empty
+        game->board[init_rank][init_file-1].piece && // there is a piece directly to the left of the moving pawn
+        game->board[init_rank][init_file-1].piece->owner != player && // it is not owned by the player
+        toupper(game->board[init_rank][init_file-1].piece->icon) == 'P' && // it is also a pawn
+        game->last_move[0]-2 == game->last_move[2] && //Black piece moved two squares down last move
+        game->last_move[2] == init_rank && game->last_move[3] == init_file-1 //The last move ended on the coordinates directly adjacent to the moving pawn
+        ) {
+            legality = 2; // valid en passant capture, will require special handling
+        }
+        else {
+            legality = -3; //illegal piece movement 
         }
     }
     else { //check for capture conditions
         if(dest_rank != init_rank-1) { 
             if(dest_file != init_file+1 && dest_file != init_file-1) {
-                return -3; //illegal piece movement 
+                legality = -3; //illegal piece movement 
             }
         
         }
     }
-    return 0; // valid move
+    return legality; // valid move
 }
 int knight_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || 
@@ -520,6 +576,4 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
           if(inCheck) {
               return -8; //The king is in check
           }
-          return -80;//generic error
-
 }
