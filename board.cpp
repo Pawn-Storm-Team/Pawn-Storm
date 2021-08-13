@@ -3,6 +3,8 @@
 //
 #include "board.h"
 #include "check_move.h"
+#include <vector>
+using namespace std;
 square::square() {
     piece = nullptr;
 }

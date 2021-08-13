@@ -22,7 +22,7 @@ public:
     ~Piece();
     Piece(int piece_value, bool owner, char icon);
     int get_value();
-    virtual void generate_moves(vector<vector<int>>,int,int);
+    virtual void generate_moves(vector<vector<int>> &,int,int) = 0;
     // virtual void generate_moves(int *,int,int);
 
     bool owner; //false black, true white
@@ -35,41 +35,41 @@ class Pawn : public Piece {
 public:
     ~Pawn();
     explicit Pawn(bool piece_owner);
-    void generate_moves(vector<vector<int>> *&, int, int);
+    void generate_moves(vector<vector<int>> &, int, int);
     // void generate_moves(int *, int, int);
 };
 class Knight : public Piece {
 public:
     ~Knight();
     explicit Knight(bool piece_owner);
-    void generate_moves(vector<vector<int>> *& moves,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
     // void generate_moves(int *,int a, int b);
 };
 class Bishop : public Piece {
 public:
     ~Bishop();
     explicit Bishop(bool piece_owner);
-    void generate_moves(vector<vector<int>> *& moves,int a, int b);
-    // void generate_moves(int *,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
 class Rook : public Piece {
 public:
     ~Rook();
     explicit Rook(bool piece_owner);
-    void generate_moves(vector<vector<int>> *& moves,int a, int b);
-    // void generate_moves(int *,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
 class Queen : public Piece {
 public:
     ~Queen();
     explicit Queen(bool piece_owner);
-    void generate_moves(vector<vector<int>> *& moves,int a, int b);
-    // void generate_moves(int *,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
 class King : public Piece {
 public:
     ~King();
     explicit King(bool piece_owner);
-    void generate_moves(vector<vector<int>> *& moves,int a, int b);
-    // void generate_moves(int *,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };

@@ -39,6 +39,7 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
     }
     else 
         return 0;//This move is so far legal, but not a capture
+    return -80;// generic error
 }
 
 int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool player) {
@@ -519,5 +520,6 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
           if(inCheck) {
               return -8; //The king is in check
           }
+          return -80;//generic error
 
 }
