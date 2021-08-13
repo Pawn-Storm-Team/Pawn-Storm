@@ -12,6 +12,7 @@ int Piece::get_value() {
 Piece::Piece() : value(0) {
     owner = 0;
 }
+Piece::~Piece(){};
 
 Piece::Piece(int piece_value, bool owner, char icon) : value(piece_value), owner(owner), icon(icon) {
     has_moved = false;
@@ -50,7 +51,8 @@ King::King(bool owner) : Piece(999, owner, 'K') {
 
 
 
-int Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == init rank, b == init file
+void Pawn::generate_moves(vector<vector<int>> & moves,int a, int b) { //a == init rank, b == init file
+// int Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == init rank, b == init file
     
     int z; //used to modify function for black/white
     vector<int> out (4,-1);
@@ -63,93 +65,90 @@ int Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == ini
     //pawn moves forward 1
     out[3] = b;
     out[2] = a + (1*z);
-    moves->push_back(out);
+    moves.push_back(out);
 
     //pawn moves forward 2
     out[3] = b;
     out[2] = a + (2 * z);
-    moves->push_back(out);
+    moves.push_back(out);
 
     //pawn take diag
     out[3] = b - 1;
     out[2] = a + (1*z);
-    moves->push_back(out);
+    moves.push_back(out);
 
     //pawn takes other diag
     out[3] = b + 1;
     out[2] = a + (1*z);
-    moves->push_back(out);
+    moves.push_back(out);
 
-    return 0;
 };
-int Bishop::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void Bishop::generate_moves(vector<vector<int>> & moves,int a, int b) {
     
     vector<int> out (4,-1);
     out[0] = a;
     out[1] = b;
     //one loop for each diagonal direction
-    for(int i = a+1, int j = b+1; i <= 7 && j <= 7; ++i, ++j) {
+    for(int i = a+1, j = b+1; i <= 7 && j <= 7; ++i, ++j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    for(int i = a+1, int j = b-1; i <= 7 && j >= 0; ++i, --j) {
+    for(int i = a+1, j = b-1; i <= 7 && j >= 0; ++i, --j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    for(int i = a-1, int j = b+1; i >= 7 && j <= 7; --i, ++j) {
+    for(int i = a-1, j = b+1; i >= 7 && j <= 7; --i, ++j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    for(int i = a-1, int j = b-1; i >= 7 && j >= 7; --i, --j) {
+    for(int i = a-1, j = b-1; i >= 7 && j >= 7; --i, --j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    return 0;
 };
-int Knight::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void Knight::generate_moves(vector<vector<int>> & moves,int a, int b) {
     vector<int> out (4,-1);
     out[0] = a;
     out[1] = b;
 
     out[2] = a+2;
     out[3] = b+1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a-2;
     out[3] = b+1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a+2;
     out[3] = b-1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a-2;
     out[3] = b-1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a+1;
     out[3] = b+2;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a-1;
     out[3] = b+2;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a+1;
     out[3] = b-2;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a-1;
     out[3] = b-2;
-    moves->push_back(out);
+    moves.push_back(out);
 
-    return 0;
 };
-int Rook::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void Rook::generate_moves(vector<vector<int>> & moves,int a, int b) {
     vector<int> out (4,-1);
     out[0] = a;
     out[1] = b;
@@ -157,27 +156,26 @@ int Rook::generate_moves(vector<vector<int>> *& moves,int a, int b) {
     for(int i = a+1; i <=7; ++i) {
         out[2] = i;
         out[3] = b;
-        moves->push_back(out);
+        moves.push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = i;
         out[3] = b;
-        moves->push_back(out);
+        moves.push_back(out);
     }
     for(int i = b+1; i <=7; ++i) {
         out[2] = a;
         out[3] = i;
-        moves->push_back(out);
+        moves.push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = a;
         out[3] = i;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    return 0;
 
 };
-int Queen::generate_moves(vector<vector<int>> *& moves,int a, int b){
+void Queen::generate_moves(vector<vector<int>> & moves,int a, int b){
     //Code of rook and bishop combined 
     
     vector<int> out (4,-1);
@@ -186,87 +184,85 @@ int Queen::generate_moves(vector<vector<int>> *& moves,int a, int b){
     
     //Bishop
     //one loop for each diagonal direction
-    for(int i = a+1, int j = b+1; i <= 7 && j <= 7; ++i, ++j) {
+    for(int i = a+1, j = b+1; i <= 7 && j <= 7; ++i, ++j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    for(int i = a+1, int j = b-1; i <= 7 && j >= 0; ++i, --j) {
+    for(int i = a+1, j = b-1; i <= 7 && j >= 0; ++i, --j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    for(int i = a-1, int j = b+1; i >= 7 && j <= 7; --i, ++j) {
+    for(int i = a-1, j = b+1; i >= 7 && j <= 7; --i, ++j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    for(int i = a-1, int j = b-1; i >= 7 && j >= 7; --i, --j) {
+    for(int i = a-1,  j = b-1; i >= 7 && j >= 7; --i, --j) {
         out[2] = i;
         out[3] = j;
-        moves->push_back(out);
+        moves.push_back(out);
     }
     
     //Rook 
     for(int i = a+1; i <=7; ++i) {
         out[2] = i;
         out[3] = b;
-        moves->push_back(out);
+        moves.push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = i;
         out[3] = b;
-        moves->push_back(out);
+        moves.push_back(out);
     }
     for(int i = b+1; i <=7; ++i) {
         out[2] = a;
         out[3] = i;
-        moves->push_back(out);
+        moves.push_back(out);
     }
     for(int i = a-1; i >=0; --i) {
         out[2] = a;
         out[3] = i;
-        moves->push_back(out);
+        moves.push_back(out);
     }
-    return 0;
 };
-int King::generate_moves(vector<vector<int>> *& moves,int a, int b) {
+void King::generate_moves(vector<vector<int>> & moves,int a, int b) {
     vector<int> out (4,-1);
     out[0] = a;
     out[1] = b;
 
     out[2] = a+1;
     out[3] = b;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a+1;
     out[3] = b+1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a-1;
     out[3] = b;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a-1;
     out[3] = b+1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a-1;
     out[3] = b-1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a+1;
     out[3] = b-1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a;
     out[3] = b+1;
-    moves->push_back(out);
+    moves.push_back(out);
 
     out[2] = a;
     out[3] = b-1;
-    moves->push_back(out);
+    moves.push_back(out);
 
-    return 0;
 };
 

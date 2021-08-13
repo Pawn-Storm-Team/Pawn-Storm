@@ -4,11 +4,13 @@
 #include "pieces.h"
 #include <vector>
 #include <string>
+using namespace std;
 
 #ifndef CHESS_BOARD_H
 #define CHESS_BOARD_H
 
 #endif //CHESS_BOARD_H
+
 
 class square {
 public:
@@ -20,7 +22,6 @@ public:
 class chessboard {
 public:
     vector<vector<int>> legal_moves;
-    vector<Piece> taken; //vector for storing taken pieces
     int clear(); //deletes all pieces, returns quantity of pieces deleted
     int initialize(); //resets board to default configuration, can be used to reset or initialize
     int get_pieces(); //returns number of pieces on board
@@ -28,7 +29,7 @@ public:
 
     int make_move(int,int,int,int);
     int menu();
-    int generate_moves(bool);//generates all legal moves, returns 1 if no legal moves
+    int gen_moves(bool, chessboard *);//generates all legal moves, returns 1 if no legal moves
     void test_move();
     square board[8][8]; // initializes 8 by 8 board, first dimension is rank, second is file
 

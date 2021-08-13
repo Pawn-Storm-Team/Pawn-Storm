@@ -2,7 +2,6 @@
 // Created by Max Van Raden on 3/27/21.
 //
 #include <iostream>
-
 #include <vector>
 #include <string>
 
@@ -20,9 +19,11 @@ public:
     int ** move_list{};
     vector<Move> moves;
     Piece();
+    ~Piece();
     Piece(int piece_value, bool owner, char icon);
     int get_value();
-    virtual int generate_moves(vector<vector<int>>,int,int);
+    virtual void generate_moves(vector<vector<int>> &,int,int) = 0;
+    // virtual void generate_moves(int *,int,int);
 
     bool owner; //false black, true white
     const int value; //the point value of the piece
@@ -32,31 +33,43 @@ public:
 
 class Pawn : public Piece {
 public:
+    ~Pawn();
     explicit Pawn(bool piece_owner);
-    int generate_moves(vector<vector<int>> *&, int, int);
+    void generate_moves(vector<vector<int>> &, int, int);
+    // void generate_moves(int *, int, int);
 };
 class Knight : public Piece {
 public:
+    ~Knight();
     explicit Knight(bool piece_owner);
-    int generate_moves(vector<vector<int>> *& moves,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(int *,int a, int b);
 };
 class Bishop : public Piece {
 public:
+    ~Bishop();
     explicit Bishop(bool piece_owner);
-    int generate_moves(vector<vector<int>> *& moves,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
 class Rook : public Piece {
 public:
+    ~Rook();
     explicit Rook(bool piece_owner);
-    int generate_moves(vector<vector<int>> *& moves,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
 class Queen : public Piece {
 public:
+    ~Queen();
     explicit Queen(bool piece_owner);
-    int generate_moves(vector<vector<int>> *& moves,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
 class King : public Piece {
 public:
+    ~King();
     explicit King(bool piece_owner);
-    int generate_moves(vector<vector<int>> *& moves,int a, int b);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };

@@ -1,4 +1,5 @@
 #include "check_move.h"
+#include "board.h"
 //TODO implement pin check
 //TODO implement check check
 //TODO handle en passant
@@ -38,19 +39,20 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
     }
     else 
         return 0;//This move is so far legal, but not a capture
+    return -80;// generic error
 }
 
-int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
+int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool player) {
 
 
-    int init_rank = move[0];
-    int init_file = move[1];
-    int dest_rank = move[2];
-    int dest_file = move[3];
+    // int init_rank = move[0];
+    // int init_file = move[1];
+    // int dest_rank = move[2];
+    // int dest_file = move[3];
 
     int a_check = agnostic_check(game, init_rank, init_file, dest_file, dest_rank, player);
     if(a_check < 0) return a_check;
-    char icon = (board[init_rank])[init_file].piece->icon;
+    char icon = (game->board[init_rank])[init_file].piece->icon;
     bool is_capture = false;
     if(a_check == 1)
         is_capture = true;
@@ -274,8 +276,8 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
           int king_file = -1;
           int isKing = 0;
           int inCheck = 0; //tracks whether or not the king is in check, needed because the board is set to a temporary state and returning early would prevent me from correcting that
-          piece * temp = NULL;
-          piece * temp2 = NULL;
+          Piece * temp = NULL;
+          Piece * temp2 = NULL;
           if(toupper(game->board[init_rank][init_file].piece->icon) == 'K'){
               king_rank = dest_rank;
               king_file = dest_file;
@@ -518,5 +520,6 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
           if(inCheck) {
               return -8; //The king is in check
           }
+          return -80;//generic error
 
 }
