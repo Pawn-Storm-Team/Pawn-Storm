@@ -14,16 +14,12 @@ Interface::Interface(){
     //board.initialize();
     gameType = local; 
     current_turn = 0;
-    game_complete = false;
+    game_complete = true;
     //
     menu();
 }
 
 Interface::~Interface(){
-    // if(board){
-    //     delete board;
-    //     board = nullptr;
-    // }
 };
 
 int Interface::menu(){
@@ -88,19 +84,27 @@ int Interface::intro() {
 //manages the prompts each player will recieve, making it clearer who is going right now, 
 //give options for who's taken what, etc
 int Interface::action_prompt(){
-    while(!game_complete){
+    while(game_complete){
+        game_complete = board.gen_moves(current_turn%2,&board);
         turn_prompt();
         ++current_turn;
         //check if checkmate
     }
-    cout << "Sombody Wins!";
+    if(!(current_turn % 2)){
+     board.draw_board();
+     cout << "Black";
+    }
+    else{ 
+     board.draw_board();
+     cout << "White";
+    }
+    cout << " Wins!\n";
     return -1;
 }
 
 
 //turn prompting
 int Interface::turn_prompt(){
-    board.gen_moves(current_turn % 2, &board);
 
     //check member for who's turn it is, set string to white or black
     if(current_turn % 2){
@@ -111,7 +115,7 @@ int Interface::turn_prompt(){
      board.draw_board();
      cout << "White";
     }
-    cout << ", turn "<< current_turn  <<"\nFormat move as MyRank:MyFile,DestinationRank:DestinationFile\n$ ";
+    cout << ", turn "<< current_turn  <<"\nFormat move as 1A:2B\n$ ";
 
     string input = string();
 
@@ -124,8 +128,8 @@ int Interface::turn_prompt(){
     // - 7 digit numbers
     // - other things I haven't thought of
     int valid = 0;
-    while(!(valid = move_format_validator(input[0],input[2],input[4],input[6]))){
-        cout << "\tThis input is invalid. Please enter only digits in a:b,x:y formatting.\n\n";
+    while(!(valid = move_format_validator(input[0],input[1],input[3],input[4]))){
+        cout << "\tThis input is invalid. Please enter only digits in 1A:2B formatting.\n\n";
         input.clear();
         cout << "\n>> ";
         cin >> input;
@@ -138,17 +142,16 @@ int Interface::turn_prompt(){
     //subtractin char 1 and storing them in int will extract the numbers
     int a, b, x, y, out;
     a = input[0] - '1';
-    b = input[2] - '1';
-    x = input[4] - '1';
-    y = input[6] - '1';
-    return board.make_move(a,b,x,y);
+    b = input[1] - '1';
+    x = input[3] - '1';
+    y = input[4] - '1';
+    return board.make_move(&board,a,b,x,y,current_turn%2);
 }
 
 //this here verifies that given char represents a number within our desired range
 int range_validator(char a){
     if(isdigit(a)){
         int b = a - '0';
-        cout << b;
         if(b>=1 && b <=8) return 0;
     }
     return 1;

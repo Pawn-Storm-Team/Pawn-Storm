@@ -80,7 +80,7 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
             return -80;//placeholder for default error
         
     }
-    return -80;
+    return result;
 }
 /*
 int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
