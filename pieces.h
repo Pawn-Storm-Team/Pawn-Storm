@@ -19,9 +19,10 @@ public:
     int ** move_list{};
     vector<Move> moves;
     Piece();
+    ~Piece();
     Piece(int piece_value, bool owner, char icon);
     int get_value();
-    virtual int generate_moves(vector<vector<int>>,int,int);
+    int generate_moves(vector<vector<int>>,int,int);
 
     bool owner; //false black, true white
     const int value; //the point value of the piece

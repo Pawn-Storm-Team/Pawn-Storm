@@ -12,6 +12,7 @@ int Piece::get_value() {
 Piece::Piece() : value(0) {
     owner = 0;
 }
+Piece::~Piece(){};
 
 Piece::Piece(int piece_value, bool owner, char icon) : value(piece_value), owner(owner), icon(icon) {
     has_moved = false;
