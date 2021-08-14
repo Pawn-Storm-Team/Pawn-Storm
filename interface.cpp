@@ -121,7 +121,7 @@ int Interface::turn_prompt(){
      board.draw_board();
      cout << "White";
     }
-    cout << ", turn "<< current_turn  <<"\nFormat move as 1A:2B\n$ ";
+    cout << ", turn "<< current_turn  <<"\nFormat move as A1:B2\n$ ";
 
     string input = string();
 
@@ -133,9 +133,37 @@ int Interface::turn_prompt(){
     //glaring holes
     // - 7 digit numbers
     // - other things I haven't thought of
+    for(int i = 0; i < 6; ++i) {
+        if(i != 2) {
+            if(toupper(input[i]) == 'A') {
+                input[i] = '1'; 
+            }
+            if(toupper(input[i]) == 'B') {
+                input[i] = '2'; 
+            }
+            if(toupper(input[i]) == 'C') {
+                input[i] = '3'; 
+            }
+            if(toupper(input[i]) == 'D') {
+                input[i] = '4'; 
+            }
+            if(toupper(input[i]) == 'E') {
+                input[i] = '5'; 
+            }
+            if(toupper(input[i]) == 'F') {
+                input[i] = '6'; 
+            }
+            if(toupper(input[i]) == 'G') {
+                input[i] = '7'; 
+            }
+            if(toupper(input[i]) == 'H') {
+                input[i] = '8'; 
+            }
+        }
+    }
     int valid = 0;
     while(!(valid = move_format_validator(input[0],input[1],input[3],input[4]))){
-        cout << "\tThis input is invalid. Please enter only digits in 1A:2B formatting.\n\n";
+        cout << "\tThis input is invalid. Please enter only digits in A1:B2 formatting.\n\n";
         input.clear();
         cout << "\n>> ";
         cin >> input;
@@ -157,7 +185,7 @@ int Interface::turn_prompt(){
     chessboard * dupe = board.duplicate();
     cout << "/n>>>>>>> dup draw\n";
     dupe->draw_board();
-    return out;
+    return board.make_move(&board,b,a,y,x,current_turn%2); //order changed so that file, rank input can be translated to rank, file format for throughput 
 }
 
 //this here verifies that given char represents a number within our desired range
