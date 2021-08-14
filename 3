@@ -145,90 +145,66 @@ int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool col
 //push possible moves into vector<string> of moves,
 //if no possible moves, indicate to interface that game is complete
 bool chessboard::gen_moves(bool color, chessboard * game){
-  for(int i = 0; i < 7; ++i){
-    for(int j = 0; j < 7;++j){
+    for(int i = 0; i < 7; ++i){
+        for(int j = 0; j < 7;++j){
 
-      Piece * curr = board[i][j].piece;
-      if(curr && curr->owner == color){
+            Piece * curr = board[i][j].piece;
+            if(curr && curr->owner == color){
 
-        vector<vector<int>> moves;
-        curr->generate_moves(moves, i, j);
+                vector<vector<int>> moves;
+                curr->generate_moves(moves, i, j);
 
 
-        while(!moves.empty()){
-          vector<int> move_vec (4,-1);
-          copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
-          moves.pop_back();
-          if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],!color)){
-            legal_moves.push_back(move_vec);
-          }
+                while(!moves.empty()){
+                    vector<int> move_vec (4,-1);
+                    copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
+                    moves.pop_back();
+                    if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],!color)){
+                        legal_moves.push_back(move_vec);
+                    }
+                }
+
+            }
         }
-
-      }
     }
-  }
-  return legal_moves.empty();
+    return legal_moves.empty();
 }
 //iterates throught the board, incrementing/decrementing
 //the total board state value based on the owner and type of piece
 int chessboard::get_value() { 
-  int state_value = 0; 
-  for(int i = 0; i < 8; ++i) {
-    for(int k = 0; k < 8; ++k){
-      if(board[i][k].piece) {
-        if(board[i][k].piece->owner) {
-          state_value += board[i][k].piece->value;
+    int state_value = 0; 
+    for(int i = 0; i < 8; ++i) {
+        for(int k = 0; k < 8; ++k){
+            if(board[i][k].piece) {
+                if(board[i][k].piece->owner) {
+                    state_value += board[i][k].piece->value;
+                }
+                else {
+                    state_value -= board[i][k].piece->value;
+                }
+            }     
         }
-        else {
-          state_value -= board[i][k].piece->value;
-        }
-      }     
     }
-  }
-  return state_value;
+    return state_value;
 }
 
 //deep copy board for ai simming
 chessboard * chessboard::duplicate(){
-  chessboard * dupe = new chessboard();
+  chessboard  dupe = chessboard();
   //get last move
   for (int k = 0; k < 4;++k){
-    dupe->last_move[k] = last_move[k];
+    dupe.last_move[k] = last_move[k]
   }
 
   //copy legal_moves
-  dupe->legal_moves = legal_moves;
+  dupe.legal_moves = legal_moves;
 
   //copy board
   for(int i = 0; i < 8; ++i){
-    for(int j = 0; j < 8; ++j){
-      Piece * p = board[i][j].piece;
-      if(p){
-        char icon = p->icon;
-        bool color = p->owner;
-        if (toupper(icon) == 'P'){
-          dupe->board[i][j].piece = new Pawn(color);
-        }
-        else if (toupper(icon) == 'R'){
-          dupe->board[i][j].piece = new Rook(color);
-        }
-        else if (toupper(icon) == 'N'){
-          dupe->board[i][j].piece = new Knight(color);
-        }
-        else if (toupper(icon) == 'B'){
-          dupe->board[i][j].piece = new Bishop(color);
-        }
-        else if (toupper(icon) == 'Q'){
-         dupe->board[i][j].piece = new Queen(color);
-        }
-        else if (toupper(icon) == 'K'){
-          dupe->board[i][j].piece = new King(color);
-        }
-      }
+    for(int j = 0; i < 8; ++j){
+      dupe.board[i][j]->piece.duplicate(board[i][j]->piece);
     }
   }
-  //chessboard * d = &dupe;
-  return dupe;
 }
 
 
