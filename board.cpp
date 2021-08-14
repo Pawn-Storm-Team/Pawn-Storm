@@ -148,6 +148,7 @@ int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool col
 //push possible moves into vector<string> of moves,
 //if no possible moves, indicate to interface that game is complete
 bool chessboard::gen_moves(bool color, chessboard * game){
+  legal_moves.clear();
   for(int i = 0; i < 7; ++i){
     for(int j = 0; j < 7;++j){
 
@@ -230,6 +231,16 @@ chessboard * chessboard::duplicate(){
     }
   }
   return dupe;
+}
+
+//I am become death, destroyer of worlds 
+//takes no prisoners and considers no move legality
+void chessboard::ai_move(int init_rank, int init_file, int dest_rank, int dest_file) {
+    if(board[dest_rank][dest_file].piece) {
+        delete board[dest_rank][dest_file].piece;
+    }
+    board[dest_rank][dest_file].piece = board[init_rank][init_file].piece;
+    board[init_rank][init_file].piece = nullptr;
 }
 
 
