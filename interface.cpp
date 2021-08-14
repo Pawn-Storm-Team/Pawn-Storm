@@ -180,11 +180,13 @@ int Interface::turn_prompt(){
     x = input[3] - '1';
     y = input[4] - '1';
     out = board.make_move(&board,a,b,x,y,current_turn%2);
+    /*
     //testing
     cout << "/n>>>>>>>testing board dup\n";
     chessboard * dupe = board.duplicate();
     cout << "/n>>>>>>> dup draw\n";
     dupe->draw_board();
+    */
     return board.make_move(&board,b,a,y,x,current_turn%2); //order changed so that file, rank input can be translated to rank, file format for throughput 
 }
 

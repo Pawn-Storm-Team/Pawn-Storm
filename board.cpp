@@ -198,7 +198,6 @@ chessboard * chessboard::duplicate(){
   for (int k = 0; k < 4;++k){
     dupe->last_move[k] = last_move[k];
   }
-
   //copy legal_moves
   dupe->legal_moves = legal_moves;
 
@@ -230,7 +229,6 @@ chessboard * chessboard::duplicate(){
       }
     }
   }
-  //chessboard * d = &dupe;
   return dupe;
 }
 
