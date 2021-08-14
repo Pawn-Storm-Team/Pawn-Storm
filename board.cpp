@@ -101,7 +101,7 @@ void chessboard::draw_board() {
 
 void chessboard::draw_board_black() {
     std::cout << "\n\n";
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+    std::cout << "\t   H     G     F     E     D     C     B     A"<< std::endl;
     for(int i = 0; i <= 7; ++i) { //print from black's perspective, so first square printed will be H1, so ranks count forward
         std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
         std::cout << i+1 << "\t";
@@ -114,7 +114,7 @@ void chessboard::draw_board_black() {
         std::cout << "|\t" << i+1 << std::endl;
     }
     std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+    std::cout << "\t   H     G     F     E     D     C     B     A"<< std::endl;
 }
 
 
