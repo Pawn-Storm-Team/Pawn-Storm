@@ -169,5 +169,23 @@ bool chessboard::gen_moves(bool color, chessboard * game){
     }
     return legal_moves.empty();
 }
+//iterates throught the board, incrementing/decrementing
+//the total board state value based on the owner and type of piece
+int chessboard::get_value() { 
+    int state_value = 0; 
+    for(int i = 0; i < 8; ++i) {
+        for(int k = 0; k < 8; ++k){
+            if(board[i][k].piece) {
+                if(board[i][k].piece->owner) {
+                    state_value += board[i][k].piece->value;
+                }
+                else {
+                    state_value -= board[i][k].piece->value;
+                }
+            }     
+        }
+    }
+    return state_value;
+}
 
 
