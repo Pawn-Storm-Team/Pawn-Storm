@@ -2,88 +2,110 @@
 // Created by Max Van Raden on 3/27/21.
 //
 #include "board.h"
-
+#include "check_move.h"
+#include <vector>
+using namespace std;
 square::square() {
-    piece = nullptr;
+  piece = nullptr;
 }
 
 square::~square() {
-    if(piece) {
-        delete piece;
-        piece = nullptr;
-    }
-
+  if(piece) {
+    delete piece;
+    piece = nullptr;
+  }
 }
+
 //Adds the pieces for a standard ascii-chess game to the board
 int chessboard::initialize() { //can be used to reset or initialize the board
-    for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece != nullptr){
-                delete board[i][k].piece;
-                board[i][k].piece = nullptr;
-            }
-        }
+  for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
+    for(int k = 0; k < 8; ++k){
+      if(board[i][k].piece != nullptr){
+        delete board[i][k].piece;
+        board[i][k].piece = nullptr;
+      }
     }
-    for(int i = 0; i < 8; ++i) {
-        bool color = true; 
-        for(int k = 0; k < 8; ++k){
-            if(i > 3) { // switch color flag to initialize black's pieces 
-                color = false;
-            }
-            if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
-                if(k == 0 || k == 7) //A1 or H1, white rooks
-                    board[i][k].piece = new rook(color);
-                if(k == 1 || k == 6) //B1 or G1, white knights
-                    board[i][k].piece = new knight(color);
-                if(k == 2 || k == 5) //C1 or F1, white bishops
-                    board[i][k].piece = new bishop(color);
-                if(k == 3) //D1, white queen
-                    board[i][k].piece = new queen(color);
-                if(k == 4) //E1, white king
-                    board[i][k].piece = new king(color);
-            }
-            if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
-                board[i][k].piece = new pawn(color);
-            }
-        }
+  }
+  for(int i = 0; i < 8; ++i) {
+    bool color = true; 
+    for(int k = 0; k < 8; ++k){
+      if(i > 3) { // switch color flag to initialize black's pieces 
+        color = false;
+      }
+      if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
+        if(k == 0 || k == 7) //A1 or H1, white rooks
+          board[i][k].piece = new Rook(color);
+        if(k == 1 || k == 6) //B1 or G1, white knights
+          board[i][k].piece = new Knight(color);
+        if(k == 2 || k == 5) //C1 or F1, white bishops
+          board[i][k].piece = new Bishop(color);
+        if(k == 3) //D1, white queen
+          board[i][k].piece = new Queen(color);
+        if(k == 4) //E1, white king
+          board[i][k].piece = new King(color);
+      }
+      if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
+        board[i][k].piece = new Pawn(color);
+      }
     }
-    return 0;
+  }
+  //test_move();
+  return 0;
 }
 //frees memory allocated during piece creation
 int chessboard::clear() {
-    int count = 0;
-    for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece != nullptr){
-                delete board[i][k].piece;
-                board[i][k].piece = nullptr;
-                ++count;
-            }
-        }
+  int count = 0;
+  for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
+    for(int k = 0; k < 8; ++k){
+      if(board[i][k].piece != nullptr){
+        delete board[i][k].piece;
+        board[i][k].piece = nullptr;
+        ++count;
+      }
     }
-    return count;
+  }
+  return count;
 }
 
 int chessboard::get_pieces() {
-    int count = 0;
-    for(int i = 0; i < 8; ++i) {
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece)
-                ++count;
-        }
+  int count = 0;
+  for(int i = 0; i < 8; ++i) {
+    for(int k = 0; k < 8; ++k){
+      if(board[i][k].piece)
+        ++count;
     }
-    return count;
+  }
+  return count;
 }
 
 void chessboard::draw_board() {
+  std::cout << "\n\n";
+  std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+  for(int i = 7; i >= 0; --i) { //print from white's perspective, so first square printed will be A8, so ranks count backwards
+    std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
+    std::cout << i+1 << "\t";
+    for(int k = 0; k < 8; ++k) {
+      if(board[i][k].piece)
+        //std::cout << "| P ";
+        std::cout << "|  " << board[i][k].piece->icon << "  ";
+      else
+        std::cout << "|     ";
+    }
+    std::cout << "|\t" << i+1 << std::endl;
+  }
+  std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
+  std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+}
+
+
+void chessboard::draw_board_black() {
     std::cout << "\n\n";
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
-    for(int i = 7; i >= 0; --i) { //print from white's perspective, so first square printed will be A8, so ranks count backwards
+    std::cout << "\t   H     G     F     E     D     C     B     A"<< std::endl;
+    for(int i = 0; i <= 7; ++i) { //print from black's perspective, so first square printed will be H1, so ranks count forward
         std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
         std::cout << i+1 << "\t";
-        for(int k = 0; k < 8; ++k) {
+        for(int k = 7; k >= 0; --k) { //print from black's perspective, so first file is H
             if(board[i][k].piece)
-                //std::cout << "| P ";
                 std::cout << "|  " << board[i][k].piece->icon << "  ";
             else
                 std::cout << "|     ";
@@ -91,111 +113,140 @@ void chessboard::draw_board() {
         std::cout << "|\t" << i+1 << std::endl;
     }
     std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+    std::cout << "\t   H     G     F     E     D     C     B     A"<< std::endl;
 }
-//TODO implement pin check
-//TODO implement check check
-//TODO handle en passant
-//TODO handle castling
-//TODO Knight, Bishop, Rook, Queen path checking
-//WHEN PASSING TO FUNCTION REMEMBER THAT RANK IS PASSED BEFORE FILE, UNLIKE A CHESS SQUARE - C4 would be passed as [3,2] (with C being 2 and 4 being 3)
-//This function checks the legality of a move, and returns an error code depending on why the move is illegal. Moves that would capture but are not marked
-//as captures are reported as illegal.
-int chessboard::check_move(int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture) {
 
-    if(!board[init_rank][init_file].piece) {//there do be a piece check
-        return -1;//No piece error
-    }
-    if(dest_rank > 7 || dest_rank < 0 || dest_file > 7 || dest_file < 0) {//the dest square do exist check
-        return -2;//Out of bounds error
-    }
-    if(dest_rank == init_rank && dest_file == init_file) {//you must move to make a move
-        return -4;//Literally not a move error
-    }
-    if(board[dest_rank][dest_file].piece->owner == board[init_rank][init_file].piece->owner) {//occupied by same side piece check
-        return -5;//Self-capture error
-    }
 
-    //
-    //PIECE MOVEMENT RULES
-    //
-    if(board[init_rank][init_file].piece->icon == 'P') {//white pawn move rules - no capture yet
-        if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) {
-            return -3;//illegal piece movement
-        }
-        //Clear path checking
-        if(dest_rank == init_rank+2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank-1][dest_file].piece)
-                return -6;//blocking piece
-        }
-    }
 
-    if(board[init_rank][init_file].piece->icon == 'p') {//black pawn move rules - no capture yet
-        if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6))
-            return -3;//illegal piece movement
-        //clear path checking
-        if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
-            if(board[dest_rank+1][dest_file].piece)
-                return -6;//blocking piece
-        }
-    }
-    //no path checking necessary as the horsey bois hop
-    if(board[init_rank][init_file].piece->icon == 'N' || board[init_rank][init_file].piece->icon == 'n') {//knight moves, not to be confused with Night Moves by bob seger
-        if(!(((init_rank - dest_rank == 2 || init_rank - dest_rank == -2) && (init_file - dest_file == 1 || init_file - dest_file == -1)) || ((init_rank - dest_rank == 1 || init_rank - dest_rank == -1) && (init_file - dest_file == 2 || init_file - dest_file == -2))))//Jesus christ I hope this is correct
-            return -3;//illegal piece movement
-    }
+int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool color){
+  //if move is illegal, send error, redo turn
+  int out = check_move(game,a,b,x,y,!color);
+  if(out < 0){
+    cout << "Illegal move, please try again";
+    return out;
+  }
 
-    if(board[init_rank][init_file].piece->icon == 'B' || board[init_rank][init_file].piece->icon == 'b') {//bishop move rules
-        int x = init_rank - dest_rank;
-        if(init_file - dest_file != x || init_file - dest_file != -x)
-            return -3;//illegal piece movement
-    }
+  board[x][y].piece = board[a][b].piece;
+  board[a][b].piece = nullptr;
+  //populate last move
+  last_move[0] = a;
+  last_move[1] = b;
+  last_move[2] = x;
+  last_move[3] = y;
 
-    if(board[init_rank][init_file].piece->icon == 'R' || board[init_rank][init_file].piece->icon == 'r') {//rook movement rules
-        if(init_file - dest_file != 0) {//if a rook moves on a file, it cannot move on a rank, and vice versa
-            if(init_rank - dest_rank != 0) {
-                return -3;//illegal piece movement
-            }
-        }
-
-        if(init_rank - dest_rank != 0) {
-            if (init_file - dest_file != 0) {
-                return -3;//illegal piece movement
-            }
-        }
-    }
-
-    if(board[init_rank][init_file].piece->icon == 'Q' || board[init_rank][init_file].piece->icon == 'q') {//queen move rules
-        bool legal_move = true;
-
-        //bishop component of queen movement check
-        int x = init_rank - dest_rank;
-        if (init_file - dest_file != x || init_file - dest_file != -x)
-            legal_move = false;
-
-        //rook component of queen movement check
-        if (!legal_move) {//only check the rook component if bishop component was false
-            if(init_file - dest_file != 0 && init_rank - dest_rank == 0) {
-                legal_move = true;
-                }
-            if(!legal_move) {//only check for other direction of rook movement if necessary
-                if (init_rank - dest_rank != 0 && init_file - dest_file == 0)
-                    legal_move = true;
-            }
-        }
-        if(!legal_move)
-            return -3;//illegal piece movement
-    }
-    if(board[init_rank][init_file].piece->icon == 'K' || board[init_rank][init_file].piece->icon == 'k') {//king move rules
-        if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
-            return -3;//illegal piece movement
-        }
-        if(init_rank - dest_rank < -1 || init_file - dest_file < -1) {
-            return -3;//illegal piece movement
-        }
-
-    }
-
-    return 0;//legal piece movement
+  return out;
 }
+
+//interface passed color
+//generate all the moves, store in legal_move vector of strings
+//will be called every turn
+//iterate through board
+//if piece exists call generate_moves,
+//capture strings of possible moves in vector,
+//pass each through the move check,
+//push possible moves into vector<string> of moves,
+//if no possible moves, indicate to interface that game is complete
+bool chessboard::gen_moves(bool color, chessboard * game){
+  legal_moves.clear();
+  for(int i = 0; i < 7; ++i){
+    for(int j = 0; j < 7;++j){
+
+      Piece * curr = board[i][j].piece;
+      if(curr && curr->owner == color){
+
+        vector<vector<int>> moves;
+        curr->generate_moves(moves, i, j);
+
+
+        while(!moves.empty()){
+          vector<int> move_vec (4,-1);
+          copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
+          moves.pop_back();
+          if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],!color)){
+            legal_moves.push_back(move_vec);
+          }
+        }
+
+      }
+    }
+  }
+  return legal_moves.empty();
+}
+//iterates throught the board, incrementing/decrementing
+//the total board state value based on the owner and type of piece
+int chessboard::get_value() { 
+  int state_value = 0; 
+  for(int i = 0; i < 8; ++i) {
+    for(int k = 0; k < 8; ++k){
+      if(board[i][k].piece) {
+        if(board[i][k].piece->owner) {
+          state_value += board[i][k].piece->value;
+        }
+        else {
+          state_value -= board[i][k].piece->value;
+        }
+      }     
+    }
+  }
+  return state_value;
+}
+
+//deep copy board for ai simming
+chessboard * chessboard::duplicate(){
+  chessboard * dupe = new chessboard();
+  //get last move
+  for (int k = 0; k < 4;++k){
+    dupe->last_move[k] = last_move[k];
+  }
+  //copy legal_moves
+  dupe->legal_moves = legal_moves;
+
+  //copy board
+  for(int i = 0; i < 8; ++i){
+    for(int j = 0; j < 8; ++j){
+      Piece * p = board[i][j].piece;
+      if(p){
+        char icon = p->icon;
+        bool color = p->owner;
+        if (toupper(icon) == 'P'){
+          dupe->board[i][j].piece = new Pawn(color);
+        }
+        else if (toupper(icon) == 'R'){
+          dupe->board[i][j].piece = new Rook(color);
+        }
+        else if (toupper(icon) == 'N'){
+          dupe->board[i][j].piece = new Knight(color);
+        }
+        else if (toupper(icon) == 'B'){
+          dupe->board[i][j].piece = new Bishop(color);
+        }
+        else if (toupper(icon) == 'Q'){
+          dupe->board[i][j].piece = new Queen(color);
+        }
+        else if (toupper(icon) == 'K'){
+          dupe->board[i][j].piece = new King(color);
+        }
+      }
+    }
+  }
+  return dupe;
+}
+
+//I am become death, destroyer of worlds 
+//takes no prisoners and considers no move legality
+void chessboard::ai_move(int init_rank, int init_file, int dest_rank, int dest_file) {
+    if(board[dest_rank][dest_file].piece) {
+        delete board[dest_rank][dest_file].piece;
+    }
+    board[dest_rank][dest_file].piece = board[init_rank][init_file].piece;
+    board[init_rank][init_file].piece = nullptr;
+    last_move[0] = init_rank;
+    last_move[1] = init_file;
+    last_move[2] = dest_rank;
+    last_move[3] = dest_file;
+}
+
+
+
+
 

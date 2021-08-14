@@ -2,21 +2,28 @@
 // Created by Max Van Raden on 3/27/21.
 //
 #include <iostream>
-#include <cmath>
+#include <vector>
+#include <string>
 
-#ifndef CHESS_CHESS_H
-#define CHESS_CHESS_H
 
-#endif //CHESS_CHESS_H
 
-int print();
+using namespace std;
 
-class piece {
+//playing with idea of move 
+struct Move{
+    int a,b,x,y;
+};
+
+class Piece {
 public:
-
-    piece();
-    piece(int piece_value, bool owner, char icon);
+    int ** move_list{};
+    vector<Move> moves;
+    Piece();
+    ~Piece();
+    Piece(int piece_value, bool owner, char icon);
     int get_value();
+    virtual void generate_moves(vector<vector<int>> &,int,int) = 0;
+    int duplicate(Piece *);
 
     bool owner; //false black, true white
     const int value; //the point value of the piece
@@ -24,27 +31,45 @@ public:
     bool has_moved; //whether the piece has ever moved, important for castling
 };
 
-class pawn : public piece {
+class Pawn : public Piece {
 public:
-    explicit pawn(bool piece_owner);
+    ~Pawn();
+    explicit Pawn(bool piece_owner);
+    void generate_moves(vector<vector<int>> &, int, int);
+    // void generate_moves(int *, int, int);
 };
-class knight : public piece {
+class Knight : public Piece {
 public:
-    explicit knight(bool piece_owner);
+    ~Knight();
+    explicit Knight(bool piece_owner);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(int *,int a, int b);
 };
-class bishop : public piece {
+class Bishop : public Piece {
 public:
-    explicit bishop(bool piece_owner);
+    ~Bishop();
+    explicit Bishop(bool piece_owner);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
-class rook : public piece {
+class Rook : public Piece {
 public:
-    explicit rook(bool piece_owner);
+    ~Rook();
+    explicit Rook(bool piece_owner);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
-class queen : public piece {
+class Queen : public Piece {
 public:
-    explicit queen(bool piece_owner);
+    ~Queen();
+    explicit Queen(bool piece_owner);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };
-class king : public piece {
+class King : public Piece {
 public:
-    explicit king(bool piece_owner);
+    ~King();
+    explicit King(bool piece_owner);
+    void generate_moves(vector<vector<int>> & moves,int a, int b);
+    // void generate_moves(vector<vector<int>> *& moves,int a, int b);
 };

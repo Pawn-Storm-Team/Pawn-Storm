@@ -1,0 +1,7 @@
+.gitignore
+a.exe
+.vscode
+jmacro
+*.gch
+a.out
+*.swp*
