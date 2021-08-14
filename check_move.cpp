@@ -99,13 +99,16 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {
     int legality = 0;
     if(!is_capture) {
-        if(dest_rank != init_rank+1 || (dest_rank != init_rank+2 && init_rank == 1)) { //moving one or two squares, checking for correct rank for moving two
-          legality = -3; //illegal piece movement
-          }
-            //Clear path checking
-        if(dest_rank == init_rank+2) { //check for a blocking piece on the skipped square when moving two squares
-            if(game->board[dest_rank-1][dest_file].piece)
+        if(dest_rank == init_rank+1 && dest_file == init_file) { //moving one square 
+            legality = 0; //valid move
+        }
+        if(dest_rank == init_rank+2 && init_rank == 1 && dest_file == init_file) { //check for a blocking piece on the skipped square when moving two squares
+            if(game->board[dest_rank-1][dest_file].piece) {
                 legality = -6; //blocking piece
+            }
+            else {
+                legality = 0; //valid move 
+            }
         }
         //En Passant capture check section - in this section because the ag check will not determine that this move is a capture due to an empty destination square 
         //En Passant check - to the right
