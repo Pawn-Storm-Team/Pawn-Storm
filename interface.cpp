@@ -259,3 +259,10 @@ void Interface::check_test(){
 
   cout << "\n chk1: " << err_1 << ' ' << suc_1;
 }
+
+void Interface::ai_turn() {
+    ai_move move;
+    move = minimax(&board,current_turn%2, 3);
+    board.ai_move(move.move[0], move.move[1], move.move[2], move.move[3]);
+    return;
+}
