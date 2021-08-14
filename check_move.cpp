@@ -148,15 +148,18 @@ int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
     }
     return legality; 
 }
-int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {\
-    int legality = 0;
-    if(!is_capture) { //check for non-capture conditions and en passant 
-        if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6)) {
-            legality = -3;//illegal piece movement
-            //clear path checking
-            if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
-                if(game->board[dest_rank+1][dest_file].piece)
-                   legality = -6;//blocking piece
+int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {
+    int legality = -3;
+    if(!is_capture) {
+        if(dest_rank == init_rank-1 && dest_file == init_file) { //moving one square 
+            legality = 0; //valid move
+        }
+        if(dest_rank == init_rank-2 && init_rank == 7 && dest_file == init_file) { //check for a blocking piece on the skipped square when moving two squares
+            if(game->board[dest_rank+1][dest_file].piece) {
+                legality = -6; //blocking piece
+            }
+            else {
+                legality = 0; //valid move 
             }
         }
         //En Passant capture check section - in this section because the ag check will not determine that this move is a capture due to an empty destination square 
@@ -184,16 +187,12 @@ int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         ) {
             legality = 2; // valid en passant capture, will require special handling
         }
-        else {
-            //legality = -3; //illegal piece movement 
-        }
     }
     else { //check for capture conditions
-        if(dest_rank != init_rank-1) { 
-            if(dest_file != init_file+1 && dest_file != init_file-1) {
-                legality = -3; //illegal piece movement 
+        if(dest_rank == init_rank-1) { 
+            if(dest_file == init_file+1 || dest_file == init_file-1) {
+                legality = 1; //capture 
             }
-        
         }
     }
     return legality; // valid move
