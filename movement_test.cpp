@@ -1,4 +1,4 @@
-#include "board.h"
+/*#include "board.h"
 #include <iostream>
 
 using namespace std;
@@ -35,3 +35,4 @@ chessboard game = initialize();
 movetest(&game);
 
 }
+*/
