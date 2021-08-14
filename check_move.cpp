@@ -217,7 +217,7 @@ int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank,
     if(diff_rank > 0 && diff_file > 0) {
         for(int i = init_rank + 1; i < dest_rank; ++i){
             for(int k = init_file + 1; k < dest_file; ++k){
-                if(!game->board[i][k].piece) {
+                if(game->board[i][k].piece) {
                     return -6; //blocking piece
                 }
             }
@@ -227,7 +227,7 @@ int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank,
     if(diff_rank > 0 && diff_file > 0) {
         for(int i = init_rank + 1; i < dest_rank; ++i){
             for(int k = init_file - 1; k > dest_file; --k){
-                if(!game->board[i][k].piece) {
+                if(game->board[i][k].piece) {
                     return -6; //blocking piece
                 }
             }
@@ -237,7 +237,7 @@ int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank,
     if(diff_rank > 0 && diff_file > 0) {
         for(int i = init_rank - 1; i > dest_rank; --i){
             for(int k = init_file + 1; k < dest_file; ++k){
-                if(!game->board[i][k].piece) {
+                if(game->board[i][k].piece) {
                     return -6; //blocking piece
                 }
             }
@@ -247,7 +247,7 @@ int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank,
     if(diff_rank > 0 && diff_file > 0) {
         for(int i = init_rank - 1; i > dest_rank; --i){
             for(int k = init_file - 1; k > dest_file; --k){
-                if(!game->board[i][k].piece) {
+                if(game->board[i][k].piece) {
                     return -6; //blocking piece
                 }
             }
@@ -301,16 +301,13 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
 }
 int queen_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
       int i = bishop_check(game, init_rank, init_file, dest_rank, dest_file);
-      if(i < 0) {
+      if(i > 0) {
           return i; 
       }
       else {
           int k = rook_check(game, init_rank, init_file, dest_rank, dest_file);
-          if(k < 0) {
-              return k;
-          }
+          return k;
       }
-      return 0; // valid move
 }
 int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {
