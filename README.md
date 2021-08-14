@@ -15,15 +15,32 @@ from scratch, and is implemented using the minimax algorithm.
 3. Run: `./a.out` (or, if on Windows, `./a.exe`)
 
 ## Screenshot of game in progress
-
+![alt text](https://github.com/Pawn-Storm-Team/Pawn-Storm/blob/dev/Screenshot.PNG)
 ## Acknowledgements 
 
-The minimax algorithm was leveraged to creat the AI, though the implementation is original. Previous work and code used for other
-implementations of chess written by Max Van Raden, specifically a javascript webapp project, was utilized during this project. 
+The minimax algorithm was leveraged to create the AI, though the implementation is original and not based off an existing implementation or guide. 
+Previous work and code used for other implementations of chess written by Max Van Raden, specifically a javascript webapp project, was utilized 
+during this project. 
+
+Though it has not been written into the project at this time, the use of Alpha-Beta pruning for searching efficiency is a long-term project goal.
 
 ## License
 
-Our project is licensed under the MIT open source license. Our license can be found [here](../blob/main/LICENSE)
+Our project is licensed under the MIT open source license. Our license can be found [here](https://github.com/Pawn-Storm-Team/Pawn-Storm/blob/main/LICENSE)
+
+## Video
+
+ The video for our project can be found [here]()
+ 
+## Work Summary
+
+  Max Van Raden wrote the AI and wrote the piece check functions, the agnostic check functions, and the function for determining
+  whether or not the king is check.
+  
+  John Bedette wrote the interface, designed the game loop and developed associated functionality, and 
+  worked on the piece check functions and the king check function.
+  
+  Development was done largely in tandem, and both team members participated in bug fixing, testing, and developing beyond what is listed above. 
 
 
 
