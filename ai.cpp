@@ -4,7 +4,7 @@ ai_move minimax(chessboard * game, bool player, int depth) {
       //determine legal moves
       //gen_moves
       
-      //base case, the tree is at a leaf and will not go any further. Return current state value and last_move 
+      //base case, the tree is at a leaf and will not go any further. Return current state value and last_move coordinates 
       if(depth == 0) {
         ai_move move;
         move.state_value = game->get_value();
@@ -36,6 +36,7 @@ ai_move minimax(chessboard * game, bool player, int depth) {
                   }
               }
           }
+          delete move_list;
           return max;
       }
       else {
@@ -49,7 +50,7 @@ ai_move minimax(chessboard * game, bool player, int depth) {
                   }
               }
           }
-          return min;
-            
+          delete move_list;
+          return min;   
       }
 }
