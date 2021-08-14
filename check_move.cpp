@@ -63,6 +63,9 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
             if(icon == 'p') result = black_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture, player);
             else result = white_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture, player);
             break;
+        case 'B':
+            result = bishop_check(game, init_rank, init_file, dest_rank, dest_file);
+            break;
         case 'N':
             result = knight_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
@@ -210,47 +213,39 @@ int knight_check(chessboard * game, int init_rank,int init_file,int dest_rank,in
 int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file) {
     int diff_rank = dest_rank - init_rank;
     int diff_file = dest_file - init_file;
-    if(diff_rank != diff_file || diff_rank != -diff_file) {
+    if(diff_rank != diff_file && diff_rank != -diff_file) {
         return -3;//illegal piece movement
     }   
     // both positive
     if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank + 1; i < dest_rank; ++i){
-            for(int k = init_file + 1; k < dest_file; ++k){
-                if(game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+        for(int i = init_rank + 1, k = init_file + 1; i < dest_rank && k < dest_file; ++i, ++k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     // rank positive, file negative
-    if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank + 1; i < dest_rank; ++i){
-            for(int k = init_file - 1; k > dest_file; --k){
-                if(game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+    if(diff_rank > 0 && diff_file < 0) {
+        for(int i = init_rank + 1, k = init_file - 1; i < dest_rank && k < dest_file; ++i, --k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     // rank negative, file positive
-    if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank - 1; i > dest_rank; --i){
-            for(int k = init_file + 1; k < dest_file; ++k){
-                if(game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+    if(diff_rank < 0 && diff_file > 0) {
+        for(int i = init_rank - 1, k = init_file + 1; i < dest_rank && k < dest_file; --i, ++k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     // both negative 
-    if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank - 1; i > dest_rank; --i){
-            for(int k = init_file - 1; k > dest_file; --k){
-                if(game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+    if(diff_rank < 0 && diff_file < 0) {
+        for(int i = init_rank - 1, k = init_file - 1; i < dest_rank && k < dest_file; --i, --k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     return 0; // valid move

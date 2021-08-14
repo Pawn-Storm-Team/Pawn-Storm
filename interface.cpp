@@ -87,7 +87,7 @@ int Interface::action_prompt(){
 
     while(!game_complete){
       //main turn pattern
-        game_complete = board.gen_moves(current_turn%2,&board);
+        //game_complete = board.gen_moves(current_turn%2,&board);
         int error_code = turn_prompt();
         while(error_code < 0){
           error_code = turn_prompt();
