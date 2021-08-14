@@ -18,8 +18,8 @@ Run: ./a.out (or, if on Windows, ./a.exe)
 
 ## Acknowledgements 
 
-The minimax algorithm was leveraged to creat the AI, and previous work and code used for other
-implementations of chess by Max Van Raden was utilized during this project. 
+The minimax algorithm was leveraged to creat the AI, though the implementation is original. Previous work and code used for other
+implementations of chess written by Max Van Raden, specifically a javascript webapp project, was utilized during this project. 
 
 ## License
 
