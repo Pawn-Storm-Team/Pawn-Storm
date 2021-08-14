@@ -241,6 +241,10 @@ void chessboard::ai_move(int init_rank, int init_file, int dest_rank, int dest_f
     }
     board[dest_rank][dest_file].piece = board[init_rank][init_file].piece;
     board[init_rank][init_file].piece = nullptr;
+    last_move[0] = init_rank;
+    last_move[1] = init_file;
+    last_move[2] = dest_rank;
+    last_move[3] = dest_file;
 }
 
 

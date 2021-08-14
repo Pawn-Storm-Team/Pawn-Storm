@@ -1,10 +1,10 @@
 #include "ai.h"
 
 ai_move minimax(chessboard * game, bool player, int depth) {
-      //determine legal moves 
+      //determine legal moves
       //gen_moves
       
-      //leaf
+      //base case, the tree is at a leaf and will not go any further. Return current state value and last_move 
       if(depth == 0) {
         ai_move move;
         move.state_value = game->get_value();
