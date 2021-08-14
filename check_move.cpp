@@ -63,6 +63,9 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
             if(icon == 'p') result = black_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture, player);
             else result = white_pawn_check(game, init_rank, init_file, dest_rank, dest_file, is_capture, player);
             break;
+        case 'B':
+            result = bishop_check(game, init_rank, init_file, dest_rank, dest_file);
+            break;
         case 'N':
             result = knight_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
@@ -97,7 +100,7 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
 */
 //Individual piece move check functions 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {
-    int legality = 0;
+    int legality = -3;
     if(!is_capture) {
         if(dest_rank == init_rank+1 && dest_file == init_file) { //moving one square 
             legality = 0; //valid move
@@ -140,23 +143,26 @@ int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         }
     }
     else { //check for capture conditions
-        if(dest_rank != init_rank+1) { 
-            if(dest_file != init_file+1 && dest_file != init_file-1) {
-                legality = -3; //illegal piece movement 
+        if(dest_rank == init_rank+1) { 
+            if(dest_file == init_file+1 || dest_file == init_file-1) {
+                legality = 1; //capture 
             }
         }
     }
-    return legality; // valid move
+    return legality; 
 }
-int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {\
-    int legality = 0;
-    if(!is_capture) { //check for non-capture conditions and en passant 
-        if(dest_rank != init_rank-1 || (dest_rank != init_rank-2 && init_rank == 6)) {
-            legality = -3;//illegal piece movement
-            //clear path checking
-            if(dest_rank == init_rank-2) {//check for a blocking piece on the skipped square when moving two squares
-                if(game->board[dest_rank+1][dest_file].piece)
-                   legality = -6;//blocking piece
+int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {
+    int legality = -3;
+    if(!is_capture) {
+        if(dest_rank == init_rank-1 && dest_file == init_file) { //moving one square 
+            legality = 0; //valid move
+        }
+        if(dest_rank == init_rank-2 && init_rank == 6 && dest_file == init_file) { //check for a blocking piece on the skipped square when moving two squares
+            if(game->board[dest_rank+1][dest_file].piece) {
+                legality = -6; //blocking piece
+            }
+            else {
+                legality = 0; //valid move 
             }
         }
         //En Passant capture check section - in this section because the ag check will not determine that this move is a capture due to an empty destination square 
@@ -184,16 +190,15 @@ int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         ) {
             legality = 2; // valid en passant capture, will require special handling
         }
-        else {
-            //legality = -3; //illegal piece movement 
+        else if(dest_file != init_file || dest_rank >= init_rank){
+          legality = -3;
         }
     }
     else { //check for capture conditions
-        if(dest_rank != init_rank-1) { 
-            if(dest_file != init_file+1 && dest_file != init_file-1) {
-                legality = -3; //illegal piece movement 
+        if(dest_rank == init_rank-1) { 
+            if(dest_file == init_file+1 || dest_file == init_file-1) {
+                legality = 1; //capture 
             }
-        
         }
     }
     return legality; // valid move
@@ -208,47 +213,39 @@ int knight_check(chessboard * game, int init_rank,int init_file,int dest_rank,in
 int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file) {
     int diff_rank = dest_rank - init_rank;
     int diff_file = dest_file - init_file;
-    if(diff_rank != diff_file || diff_rank != -diff_file) {
+    if(diff_rank != diff_file && diff_rank != -diff_file) {
         return -3;//illegal piece movement
     }   
     // both positive
     if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank + 1; i < dest_rank; ++i){
-            for(int k = init_file + 1; k < dest_file; ++k){
-                if(!game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+        for(int i = init_rank + 1, k = init_file + 1; i < dest_rank && k < dest_file; ++i, ++k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     // rank positive, file negative
-    if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank + 1; i < dest_rank; ++i){
-            for(int k = init_file - 1; k > dest_file; --k){
-                if(!game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+    if(diff_rank > 0 && diff_file < 0) {
+        for(int i = init_rank + 1, k = init_file - 1; i < dest_rank && k < dest_file; ++i, --k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     // rank negative, file positive
-    if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank - 1; i > dest_rank; --i){
-            for(int k = init_file + 1; k < dest_file; ++k){
-                if(!game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+    if(diff_rank < 0 && diff_file > 0) {
+        for(int i = init_rank - 1, k = init_file + 1; i < dest_rank && k < dest_file; --i, ++k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     // both negative 
-    if(diff_rank > 0 && diff_file > 0) {
-        for(int i = init_rank - 1; i > dest_rank; --i){
-            for(int k = init_file - 1; k > dest_file; --k){
-                if(!game->board[i][k].piece) {
-                    return -6; //blocking piece
-                }
-            }
+    if(diff_rank < 0 && diff_file < 0) {
+        for(int i = init_rank - 1, k = init_file - 1; i < dest_rank && k < dest_file; --i, --k){   
+            if(game->board[i][k].piece) {
+                return -6; //blocking piece
+            }   
         }
     }
     return 0; // valid move
@@ -262,14 +259,14 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
     if(dest_file == init_file && dest_rank != init_rank) {
         if(dest_rank - init_rank > 0) {
             for(int i = init_rank + 1; i < dest_rank; ++i) {
-                if(!game->board[i][init_file].piece) {
+                if(game->board[i][init_file].piece) {
                     return -6; //blocking piece
                 }
             }
         }
         else {
             for(int i = init_rank - 1; i > dest_rank; --i) {
-                if(!game->board[i][init_file].piece) {
+                if(game->board[i][init_file].piece) {
                     return -6; //blocking piece
                 }
             }
@@ -279,14 +276,14 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
     else if(dest_file != init_file && dest_rank == init_rank) {
         if(dest_file - init_file > 0) {
             for(int i = init_file + 1; i < dest_file; ++i) {
-                if(!game->board[init_rank][i].piece) {
+                if(game->board[init_rank][i].piece) {
                     return -6; //blocking piece
                 }
             }
         }
         else {
             for(int i = init_file - 1; i > dest_file; --i) {
-                if(!game->board[init_rank][i].piece) {
+                if(game->board[init_rank][i].piece) {
                     return -6; //blocking piece
                 }
             }
@@ -299,16 +296,13 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
 }
 int queen_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
       int i = bishop_check(game, init_rank, init_file, dest_rank, dest_file);
-      if(i < 0) {
+      if(i > 0) {
           return i; 
       }
       else {
           int k = rook_check(game, init_rank, init_file, dest_rank, dest_file);
-          if(k < 0) {
-              return k;
-          }
+          return k;
       }
-      return 0; // valid move
 }
 int king_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file) {
     if(init_rank - dest_rank > 1 || init_file - dest_file > 1) {

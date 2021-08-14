@@ -87,7 +87,7 @@ int Interface::action_prompt(){
 
     while(!game_complete){
       //main turn pattern
-        game_complete = board.gen_moves(current_turn%2,&board);
+        //game_complete = board.gen_moves(current_turn%2,&board);
         int error_code = turn_prompt();
         while(error_code < 0){
           error_code = turn_prompt();
@@ -128,45 +128,19 @@ int Interface::turn_prompt(){
     cin >> input;
     cin.clear();
     cin.ignore();
-
+    input = convert_input(input);
     //todo sanitize further
     //glaring holes
     // - 7 digit numbers
     // - other things I haven't thought of
-    for(int i = 0; i < 6; ++i) {
-        if(i != 2) {
-            if(toupper(input[i]) == 'A') {
-                input[i] = '1'; 
-            }
-            if(toupper(input[i]) == 'B') {
-                input[i] = '2'; 
-            }
-            if(toupper(input[i]) == 'C') {
-                input[i] = '3'; 
-            }
-            if(toupper(input[i]) == 'D') {
-                input[i] = '4'; 
-            }
-            if(toupper(input[i]) == 'E') {
-                input[i] = '5'; 
-            }
-            if(toupper(input[i]) == 'F') {
-                input[i] = '6'; 
-            }
-            if(toupper(input[i]) == 'G') {
-                input[i] = '7'; 
-            }
-            if(toupper(input[i]) == 'H') {
-                input[i] = '8'; 
-            }
-        }
-    }
+    
     int valid = 0;
     while(!(valid = move_format_validator(input[0],input[1],input[3],input[4]))){
         cout << "\tThis input is invalid. Please enter only digits in A1:B2 formatting.\n\n";
         input.clear();
         cout << "\n>> ";
         cin >> input;
+        input = convert_input(input);
         cin.clear();
         cin.ignore();
     }
@@ -229,3 +203,37 @@ int Interface::build_online_game(){
 int Interface::build_vs_AI(){
     return 0;
 };
+
+string Interface::convert_input(string input) {
+    cout << "\nThis is the input: " << input << endl;
+    for(int i = 0; i < 6; ++i) {
+        if(i != 2) {
+            if(toupper(input[i]) == 'A') {
+                input[i] = '1'; 
+            }
+            if(toupper(input[i]) == 'B') {
+                input[i] = '2'; 
+            }
+            if(toupper(input[i]) == 'C') {
+                input[i] = '3'; 
+            }
+            if(toupper(input[i]) == 'D') {
+                input[i] = '4'; 
+            }
+            if(toupper(input[i]) == 'E') {
+                input[i] = '5'; 
+            }
+            if(toupper(input[i]) == 'F') {
+                input[i] = '6'; 
+            }
+            if(toupper(input[i]) == 'G') {
+                input[i] = '7'; 
+            }
+            if(toupper(input[i]) == 'H') {
+                input[i] = '8'; 
+            }
+        }
+    }
+    cout << "\nThis is the input after being modified: " << input << endl;
+    return input;
+}

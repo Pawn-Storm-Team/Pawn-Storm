@@ -31,4 +31,5 @@ class Interface{
         int turn_prompt();
         bool move_format_validator(char,char,char,char);
         void disp_intro_menu();
+        string convert_input(string input);
 };
