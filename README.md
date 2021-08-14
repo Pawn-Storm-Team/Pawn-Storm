@@ -21,6 +21,12 @@ Run: ./a.out (or, if on Windows, ./a.exe)
 The minimax algorithm was leveraged to creat the AI, and previous work and code used for other
 implementations of chess by Max Van Raden was utilized during this project. 
 
+## License
+
+Our project is licensed under the MIT open source license. Our license can be found [here](../blob/main/LICENSE)
+
+
+
 ## Roadmap
 - Week 1 : Basic board with pieces moving
 - Week 2 : (Prototype Complete) Correct Chess rules and local multiplayer
