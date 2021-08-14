@@ -18,6 +18,16 @@ Piece::Piece(int piece_value, bool owner, char icon) : value(piece_value), owner
     has_moved = false;
 }
 
+/*
+int Piece::duplicate(Piece * p){
+  owner = p->owner;
+  value = p->get_value();
+  icon = p->icon;
+  has_moved = p->has_moved;
+  return 0;
+}
+*/
+
 //pawn class
 Pawn::Pawn(bool owner) : Piece(1, owner, 'P') {
     if(!owner)
