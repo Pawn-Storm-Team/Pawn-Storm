@@ -10,9 +10,9 @@ as well as the option for two players to play a game against each other locally.
 from scratch, and is implemented using the minimax algorithm.
 
 ## Running the app
-Clone the repository to a local directory
-Run from the root of the directory: g++ *.cpp
-Run: ./a.out (or, if on Windows, ./a.exe)
+1. Clone the repository to a local directory
+2. Run from the root of the directory: `g++ *.cpp`
+3. Run: `./a.out` (or, if on Windows, `./a.exe`)
 
 ## Screenshot of game in progress
 
