@@ -26,6 +26,7 @@ public:
     int initialize(); //resets board to default configuration, can be used to reset or initialize
     int get_pieces(); //returns number of pieces on board
     void draw_board();
+    void draw_board_black();
 
     int make_move(chessboard *,int,int,int,int,bool);
     int menu();

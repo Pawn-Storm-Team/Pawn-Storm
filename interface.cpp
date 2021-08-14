@@ -14,7 +14,7 @@ Interface::Interface(){
     //board.initialize();
     gameType = local; 
     current_turn = 0;
-    game_complete = false;
+    game_complete = true;
     //
     menu();
 }
@@ -84,6 +84,7 @@ int Interface::intro() {
 //manages the prompts each player will recieve, making it clearer who is going right now, 
 //give options for who's taken what, etc
 int Interface::action_prompt(){
+
     while(!game_complete){
       //main turn pattern
         game_complete = board.gen_moves(current_turn%2,&board);
