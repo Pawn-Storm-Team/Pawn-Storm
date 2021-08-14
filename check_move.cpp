@@ -154,7 +154,7 @@ int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         if(dest_rank == init_rank-1 && dest_file == init_file) { //moving one square 
             legality = 0; //valid move
         }
-        if(dest_rank == init_rank-2 && init_rank == 7 && dest_file == init_file) { //check for a blocking piece on the skipped square when moving two squares
+        if(dest_rank == init_rank-2 && init_rank == 6 && dest_file == init_file) { //check for a blocking piece on the skipped square when moving two squares
             if(game->board[dest_rank+1][dest_file].piece) {
                 legality = -6; //blocking piece
             }
@@ -186,6 +186,9 @@ int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         game->last_move[2] == init_rank && game->last_move[3] == init_file-1 //The last move ended on the coordinates directly adjacent to the moving pawn
         ) {
             legality = 2; // valid en passant capture, will require special handling
+        }
+        else if(dest_file != init_file || dest_rank >= init_rank){
+          legality = -3;
         }
     }
     else { //check for capture conditions
