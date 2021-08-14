@@ -6,133 +6,136 @@
 #include <vector>
 using namespace std;
 square::square() {
-    piece = nullptr;
+  piece = nullptr;
 }
 
 square::~square() {
-    if(piece) {
-        delete piece;
-        piece = nullptr;
-    }
+  if(piece) {
+    delete piece;
+    piece = nullptr;
+  }
 
 }
 
 //Adds the pieces for a standard ascii-chess game to the board
 int chessboard::initialize() { //can be used to reset or initialize the board
-    for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece != nullptr){
-                delete board[i][k].piece;
-                board[i][k].piece = nullptr;
-            }
-        }
+  for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
+    for(int k = 0; k < 8; ++k){
+      if(board[i][k].piece != nullptr){
+        delete board[i][k].piece;
+        board[i][k].piece = nullptr;
+      }
     }
-    for(int i = 0; i < 8; ++i) {
-        bool color = true; 
-        for(int k = 0; k < 8; ++k){
-            if(i > 3) { // switch color flag to initialize black's pieces 
-                color = false;
-            }
-            if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
-                if(k == 0 || k == 7) //A1 or H1, white rooks
-                    board[i][k].piece = new Rook(color);
-                if(k == 1 || k == 6) //B1 or G1, white knights
-                    board[i][k].piece = new Knight(color);
-                if(k == 2 || k == 5) //C1 or F1, white bishops
-                    board[i][k].piece = new Bishop(color);
-                if(k == 3) //D1, white queen
-                    board[i][k].piece = new Queen(color);
-                if(k == 4) //E1, white king
-                    board[i][k].piece = new King(color);
-            }
-            if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
-                board[i][k].piece = new Pawn(color);
-            }
-        }
+  }
+  for(int i = 0; i < 8; ++i) {
+    bool color = true; 
+    for(int k = 0; k < 8; ++k){
+      if(i > 3) { // switch color flag to initialize black's pieces 
+        color = false;
+      }
+      if(i == 0 || i == 7) { //rank is 1, white backrank, initialize with pieces
+        if(k == 0 || k == 7) //A1 or H1, white rooks
+          board[i][k].piece = new Rook(color);
+        if(k == 1 || k == 6) //B1 or G1, white knights
+          board[i][k].piece = new Knight(color);
+        if(k == 2 || k == 5) //C1 or F1, white bishops
+          board[i][k].piece = new Bishop(color);
+        if(k == 3) //D1, white queen
+          board[i][k].piece = new Queen(color);
+        if(k == 4) //E1, white king
+          board[i][k].piece = new King(color);
+      }
+      if(i == 1 || i == 6) { //rank is 2, white frontrank, initialize with pawns
+        board[i][k].piece = new Pawn(color);
+      }
     }
-    //test_move();
-    return 0;
+  }
+  //test_move();
+  return 0;
 }
 //frees memory allocated during piece creation
 int chessboard::clear() {
-    int count = 0;
-    for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece != nullptr){
-                delete board[i][k].piece;
-                board[i][k].piece = nullptr;
-                ++count;
-            }
-        }
+  int count = 0;
+  for(int i = 0; i < 8; ++i) { //wipes the board clean, no pieces
+    for(int k = 0; k < 8; ++k){
+      if(board[i][k].piece != nullptr){
+        delete board[i][k].piece;
+        board[i][k].piece = nullptr;
+        ++count;
+      }
     }
-    return count;
+  }
+  return count;
 }
 
 int chessboard::get_pieces() {
-    int count = 0;
-    for(int i = 0; i < 8; ++i) {
-        for(int k = 0; k < 8; ++k){
-            if(board[i][k].piece)
-                ++count;
-        }
+  int count = 0;
+  for(int i = 0; i < 8; ++i) {
+    for(int k = 0; k < 8; ++k){
+      if(board[i][k].piece)
+        ++count;
     }
-    return count;
+  }
+  return count;
 }
 
 void chessboard::draw_board() {
-    std::cout << "\n\n";
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
-    for(int i = 7; i >= 0; --i) { //print from white's perspective, so first square printed will be A8, so ranks count backwards
-        std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-        std::cout << i+1 << "\t";
-        for(int k = 0; k < 8; ++k) {
-            if(board[i][k].piece)
-                //std::cout << "| P ";
-                std::cout << "|  " << board[i][k].piece->icon << "  ";
-            else
-                std::cout << "|     ";
-        }
-        std::cout << "|\t" << i+1 << std::endl;
-    }
+  std::cout << "\n\n";
+  std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+  for(int i = 7; i >= 0; --i) { //print from white's perspective, so first square printed will be A8, so ranks count backwards
     std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+    std::cout << i+1 << "\t";
+    for(int k = 0; k < 8; ++k) {
+      if(board[i][k].piece)
+        //std::cout << "| P ";
+        std::cout << "|  " << board[i][k].piece->icon << "  ";
+      else
+        std::cout << "|     ";
+    }
+    std::cout << "|\t" << i+1 << std::endl;
+  }
+  std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
+  std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
 }
 
 
 void chessboard::draw_board_black() {
-    std::cout << "\n\n";
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
-    for(int i = 0; i <= 7; ++i) { //print from black's perspective, so first square printed will be H1, so ranks count forward
-        std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-        std::cout << i+1 << "\t";
-        for(int k = 7; k >= 0; --k) { //print from black's perspective, so first file is H
-            if(board[i][k].piece)
-                std::cout << "|  " << board[i][k].piece->icon << "  ";
-            else
-                std::cout << "|     ";
-        }
-        std::cout << "|\t" << i+1 << std::endl;
-    }
+  std::cout << "\n\n";
+  std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+  for(int i = 0; i <= 7; ++i) { //print from black's perspective, so first square printed will be H1, so ranks count forward
     std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
-    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+    std::cout << i+1 << "\t";
+    for(int k = 7; k >= 0; --k) { //print from black's perspective, so first file is H
+      if(board[i][k].piece)
+        std::cout << "|  " << board[i][k].piece->icon << "  ";
+      else
+        std::cout << "|     ";
+    }
+    std::cout << "|\t" << i+1 << std::endl;
+  }
+  std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
+  std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
 }
 
 
 
 int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool color){
-    //if move is illegal, send error, redo turn
-    if(check_move(game,a,b,x,y,!color)< 0){
+  //if move is illegal, send error, redo turn
+  if(check_move(game,a,b,x,y,!color)< 0){
 
-        cout << "Illegal move, please try again";
-        return 1;
-    }
+    cout << "Illegal move, please try again";
+    return 1;
+  }
 
-    //todo, record taken piece
-    //move
-    board[x][y].piece = board[a][b].piece;
-    board[a][b].piece = nullptr;
+  board[x][y].piece = board[a][b].piece;
+  board[a][b].piece = nullptr;
+  //populate last move
+  last_move[0] = a;
+  last_move[1] = b;
+  last_move[2] = x;
+  last_move[3] = y;
 
-    return 0;
+  return 0;
 }
 
 //interface passed color
@@ -195,7 +198,6 @@ chessboard * chessboard::duplicate(){
   for (int k = 0; k < 4;++k){
     dupe->last_move[k] = last_move[k];
   }
-
   //copy legal_moves
   dupe->legal_moves = legal_moves;
 
@@ -219,7 +221,7 @@ chessboard * chessboard::duplicate(){
           dupe->board[i][j].piece = new Bishop(color);
         }
         else if (toupper(icon) == 'Q'){
-         dupe->board[i][j].piece = new Queen(color);
+          dupe->board[i][j].piece = new Queen(color);
         }
         else if (toupper(icon) == 'K'){
           dupe->board[i][j].piece = new King(color);
@@ -227,7 +229,6 @@ chessboard * chessboard::duplicate(){
       }
     }
   }
-  //chessboard * d = &dupe;
   return dupe;
 }
 
