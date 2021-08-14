@@ -4,6 +4,7 @@
 //
 //
 #include "board.h"
+#include "ai.h"
 
 enum GameType{ local, whiteOnline, blackOnline, whiteAI, BlackAI};
 
@@ -33,4 +34,5 @@ class Interface{
         void disp_intro_menu();
         string convert_input(string input);
         void check_test();
+        void ai_turn(); //calls minimax and uses ai_move to play the move 
 };
