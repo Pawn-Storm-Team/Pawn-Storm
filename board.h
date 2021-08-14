@@ -30,6 +30,7 @@ public:
     void draw_board_black();
 
     int make_move(chessboard *,int,int,int,int,bool);
+    void ai_move(int, int, int, int); //a brutal, no shits given function that makes a move with no concern in the world for whether or not it's legal. SANATIZED MOVE INPUTS ONLY. Returns nothing because it takes no prisoners and doesn't care 
     int menu();
     bool gen_moves(bool, chessboard *);//generates all legal moves, returns 1 if no legal moves
     void test_move();

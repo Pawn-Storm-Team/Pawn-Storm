@@ -79,8 +79,7 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
             result = king_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         default:
-            return -80;//placeholder for default error
-        
+            return -80;//placeholder for default error   
     }
     result = is_in_check(game,init_rank, init_file, dest_rank, dest_file, is_capture, player);
     return result;
