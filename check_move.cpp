@@ -262,14 +262,14 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
     if(dest_file == init_file && dest_rank != init_rank) {
         if(dest_rank - init_rank > 0) {
             for(int i = init_rank + 1; i < dest_rank; ++i) {
-                if(!game->board[i][init_file].piece) {
+                if(game->board[i][init_file].piece) {
                     return -6; //blocking piece
                 }
             }
         }
         else {
             for(int i = init_rank - 1; i > dest_rank; --i) {
-                if(!game->board[i][init_file].piece) {
+                if(game->board[i][init_file].piece) {
                     return -6; //blocking piece
                 }
             }
@@ -279,14 +279,14 @@ int rook_check(chessboard * game, int init_rank,int init_file,int dest_rank,int 
     else if(dest_file != init_file && dest_rank == init_rank) {
         if(dest_file - init_file > 0) {
             for(int i = init_file + 1; i < dest_file; ++i) {
-                if(!game->board[init_rank][i].piece) {
+                if(game->board[init_rank][i].piece) {
                     return -6; //blocking piece
                 }
             }
         }
         else {
             for(int i = init_file - 1; i > dest_file; --i) {
-                if(!game->board[init_rank][i].piece) {
+                if(game->board[init_rank][i].piece) {
                     return -6; //blocking piece
                 }
             }
