@@ -133,6 +133,7 @@ int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool col
   last_move[1] = b;
   last_move[2] = x;
   last_move[3] = y;
+  if(board[x][y].piece->icon )
 
   return out;
 }
