@@ -114,7 +114,7 @@ int Interface::turn_prompt(){
 
     //check member for who's turn it is, set string to white or black
     if(current_turn % 2){
-     board.draw_board();
+     board.draw_board_black();
      cout << "Black";
     }
     else{ 
