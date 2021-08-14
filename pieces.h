@@ -23,7 +23,7 @@ public:
     Piece(int piece_value, bool owner, char icon);
     int get_value();
     virtual void generate_moves(vector<vector<int>> &,int,int) = 0;
-    // virtual void generate_moves(int *,int,int);
+    int duplicate(Piece *);
 
     bool owner; //false black, true white
     const int value; //the point value of the piece

@@ -1,4 +1,4 @@
-#include "board.h"
+tinclude "board.h"
 
 /*
 Step 1: pass in current board state, current player, and depth to go to, and int [] for the move to be played

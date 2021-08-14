@@ -4,3 +4,4 @@ a.exe
 jmacro
 *.gch
 a.out
+*.swp*
