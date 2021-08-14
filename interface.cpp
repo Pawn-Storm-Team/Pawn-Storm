@@ -14,7 +14,7 @@ Interface::Interface(){
     //board.initialize();
     gameType = local; 
     current_turn = 0;
-    game_complete = true;
+    game_complete = false;
     //
     menu();
 }
@@ -151,7 +151,13 @@ int Interface::turn_prompt(){
     b = input[1] - '1';
     x = input[3] - '1';
     y = input[4] - '1';
-    return board.make_move(&board,a,b,x,y,current_turn%2);
+    out = board.make_move(&board,a,b,x,y,current_turn%2);
+    //testing
+    cout << "/n>>>>>>>testing board dup\n";
+    chessboard * dupe = board.duplicate();
+    cout << "/n>>>>>>> dup draw\n";
+    dupe->draw_board();
+    return out;
 }
 
 //this here verifies that given char represents a number within our desired range

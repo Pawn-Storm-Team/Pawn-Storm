@@ -1,3 +1,4 @@
+/*
 #include "board.h"
 #include <iostream>
 
@@ -35,3 +36,4 @@ chessboard game = initialize();
 movetest(&game);
 
 }
+*/

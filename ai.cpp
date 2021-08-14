@@ -13,7 +13,7 @@ ai_move minimax(chessboard * game, bool player, int depth) {
             return move;
         }
         /*for(all legal moves) {
-            ai_move move_list[332]; //theoretical, likely too high upper bound on possible moves per board state
+            //theoretical,ai_move move_list[332], likely too high upper bound on possible moves per board state
             make the move
             move_list[i] = minimax(modified_game, !player, depth-1)
         }
@@ -22,7 +22,7 @@ ai_move minimax(chessboard * game, bool player, int depth) {
             max.state_value = -99999;
             for(int i = 0; i < 333; ++i) {
                 if(move_list[i].state_value >= max.state_value) {
-                    max.state_value = move_list[i].statevalue
+                    // ask max what to do on this later max.state_value = move_list[i].statevalue
                     max.move[i] = move_list[i].move[i]
                 }
             }
