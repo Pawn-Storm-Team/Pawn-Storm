@@ -1,6 +1,9 @@
+/*
 #include "ai.h"
 
 ai_move minimax(chessboard * game, bool player, int depth) {
+
+
       //determine legal moves 
       //gen_moves
       
@@ -14,13 +17,14 @@ ai_move minimax(chessboard * game, bool player, int depth) {
         for(int i = 0; i < 4; ++i) {
           move.move[i] = game->last_move[i];
         }
+
         return move;
       }
       //while(!game->legal_moves.empty()){
       while(!dupe->legal_moves.empty()){
         move 
       }
-        /*for(all legal moves) {
+        for(all legal moves) {
             //theoretical,ai_move move_list[332], likely too high upper bound on possible moves per board state
             make the move
             move_list[i] = minimax(modified_game, !player, depth-1)
@@ -45,3 +49,4 @@ ai_move minimax(chessboard * game, bool player, int depth) {
                 }
             }
             return min;
+            */

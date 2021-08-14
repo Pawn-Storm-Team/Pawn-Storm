@@ -32,4 +32,5 @@ class Interface{
         bool move_format_validator(char,char,char,char);
         void disp_intro_menu();
         string convert_input(string input);
+        void check_test();
 };

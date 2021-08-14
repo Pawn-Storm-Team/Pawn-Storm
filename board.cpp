@@ -14,7 +14,6 @@ square::~square() {
     delete piece;
     piece = nullptr;
   }
-
 }
 
 //Adds the pieces for a standard ascii-chess game to the board
@@ -121,10 +120,10 @@ void chessboard::draw_board_black() {
 
 int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool color){
   //if move is illegal, send error, redo turn
-  if(check_move(game,a,b,x,y,!color)< 0){
-
+  int out = check_move(game,a,b,x,y,!color);
+  if(out < 0){
     cout << "Illegal move, please try again";
-    return 1;
+    return out;
   }
 
   board[x][y].piece = board[a][b].piece;
@@ -135,7 +134,7 @@ int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool col
   last_move[2] = x;
   last_move[3] = y;
 
-  return 0;
+  return out;
 }
 
 //interface passed color
@@ -231,9 +230,6 @@ chessboard * chessboard::duplicate(){
   }
   return dupe;
 }
-
-
-
 
 
 
