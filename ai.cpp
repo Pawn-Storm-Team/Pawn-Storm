@@ -1,7 +1,8 @@
+/*
 #include "ai.h"
 
 ai_move minimax(chessboard * game, bool player, int depth) {
-      //determine legal moves
+
       //gen_moves
       
       //base case, the tree is at a leaf and will not go any further. Return current state value and last_move coordinates 
@@ -11,12 +12,15 @@ ai_move minimax(chessboard * game, bool player, int depth) {
         for(int i = 0; i < 4; ++i) {
           move.move[i] = game->last_move[i];
         }
+
         return move;
       }
+
       //Meat of the recursion
        //list of ai_move structs sized at theoretical maximum legal moves
       game->gen_moves(player, game);//generate all legal moves for the current player in the current board state
       ai_move * move_list = new ai_move[game->legal_moves.size()-1];
+
 
       for(int i = 0; i < game->legal_moves.size(); ++i) {
         chessboard * temp = game->duplicate();
@@ -41,6 +45,7 @@ ai_move minimax(chessboard * game, bool player, int depth) {
       }
       else {
             ai_move min;
+
             min.state_value = 99999;
             for(int i = 0; i < game->legal_moves.size(); ++i) {
               if(move_list[i].state_value < min.state_value) {                    

@@ -40,6 +40,7 @@ public:
     square board[8][8]; // initializes 8 by 8 board, first dimension is rank, second is file
     int last_move [4] = {-1, -1, -1, -1};
     vector<vector<int>> legal_moves;
+
 };
 
 
