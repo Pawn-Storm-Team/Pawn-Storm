@@ -14,7 +14,7 @@ Interface::Interface(){
     //board.initialize();
     gameType = local; 
     current_turn = 0;
-    game_complete = true;
+    game_complete = false;
     //
     menu();
 }
@@ -84,11 +84,16 @@ int Interface::intro() {
 //manages the prompts each player will recieve, making it clearer who is going right now, 
 //give options for who's taken what, etc
 int Interface::action_prompt(){
-    while(game_complete){
+    while(!game_complete){
+      //main turn pattern
         game_complete = board.gen_moves(current_turn%2,&board);
-        turn_prompt();
+        int error_code = turn_prompt();
+        while(error_code < 0){
+          error_code = turn_prompt();
+          cout << "\nerr no:"<< error_code<<'\n';
+        };
+        cout << "\nerr no:"<< error_code<<'\n';
         ++current_turn;
-        //check if checkmate
     }
     if(!(current_turn % 2)){
      board.draw_board();
