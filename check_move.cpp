@@ -97,7 +97,7 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
 */
 //Individual piece move check functions 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {
-    int legality = 0;
+    int legality = -3;
     if(!is_capture) {
         if(dest_rank == init_rank+1 && dest_file == init_file) { //moving one square 
             legality = 0; //valid move
@@ -140,13 +140,13 @@ int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         }
     }
     else { //check for capture conditions
-        if(dest_rank != init_rank+1) { 
-            if(dest_file != init_file+1 && dest_file != init_file-1) {
-                legality = -3; //illegal piece movement 
+        if(dest_rank == init_rank+1) { 
+            if(dest_file == init_file+1 || dest_file == init_file-1) {
+                legality = 1; //capture 
             }
         }
     }
-    return legality; // valid move
+    return legality; 
 }
 int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {\
     int legality = 0;
