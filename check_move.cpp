@@ -49,7 +49,7 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
     // int dest_rank = move[2];
     // int dest_file = move[3];
 
-    int a_check = agnostic_check(game, init_rank, init_file, dest_file, dest_rank, player);
+    int a_check = agnostic_check(game, init_rank, init_file, dest_rank, dest_file, player);
     if(a_check < 0) return a_check;
     char icon = (game->board[init_rank])[init_file].piece->icon;
     bool is_capture = false;
@@ -135,8 +135,8 @@ int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
         ) {
             legality = 2; // valid en passant capture, will require special handling
         }
-        else {
-            legality = -3; //illegal piece movement 
+        else if(dest_file != init_file || dest_rank <= init_rank){
+          legality = -3;
         }
     }
     else { //check for capture conditions
@@ -185,7 +185,7 @@ int black_pawn_check(chessboard * game, int init_rank,int init_file,int dest_ran
             legality = 2; // valid en passant capture, will require special handling
         }
         else {
-            legality = -3; //illegal piece movement 
+            //legality = -3; //illegal piece movement 
         }
     }
     else { //check for capture conditions

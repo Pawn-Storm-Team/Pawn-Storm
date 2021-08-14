@@ -99,11 +99,30 @@ void chessboard::draw_board() {
 }
 
 
+void chessboard::draw_board_black() {
+    std::cout << "\n\n";
+    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+    for(int i = 0; i <= 7; ++i) { //print from black's perspective, so first square printed will be H1, so ranks count forward
+        std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
+        std::cout << i+1 << "\t";
+        for(int k = 7; k >= 0; --k) { //print from black's perspective, so first file is H
+            if(board[i][k].piece)
+                std::cout << "|  " << board[i][k].piece->icon << "  ";
+            else
+                std::cout << "|     ";
+        }
+        std::cout << "|\t" << i+1 << std::endl;
+    }
+    std::cout << "\t   -     -     -     -     -     -     -     -" << std::endl;
+    std::cout << "\t   A     B     C     D     E     F     G     H"<< std::endl;
+}
+
+
+
 int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool color){
-    cout << "\nmake_move vals " << a << b << x << y << "\n";
     //if move is illegal, send error, redo turn
-    //placeholder
-    if(!check_move(game,a,b,x,y,color)){
+    if(check_move(game,a,b,x,y,!color)< 0){
+
         cout << "Illegal move, please try again";
         return 1;
     }
@@ -139,9 +158,9 @@ bool chessboard::gen_moves(bool color, chessboard * game){
                 while(!moves.empty()){
                     vector<int> move_vec (4,-1);
                     copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
-                    if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],color)){
+                    moves.pop_back();
+                    if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],!color)){
                         legal_moves.push_back(move_vec);
-                        moves.pop_back();
                     }
                 }
 
