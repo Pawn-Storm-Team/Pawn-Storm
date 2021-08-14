@@ -11,7 +11,7 @@ using namespace std;
 
 Interface::Interface(){
 
-  check_test();
+  //check_test();
   //make board init values
   //board.initialize();
   gameType = local; 
@@ -84,7 +84,7 @@ int Interface::action_prompt(){
   while(!game_complete){
     //main turn pattern
     if(gameType == whiteAI){
-      //ai goes
+      ai_turn();
     }
     else {
       int error_code = turn_prompt();
@@ -93,7 +93,7 @@ int Interface::action_prompt(){
       };
     }
     if(gameType == blackAI){
-      //ai goes
+      ai_turn();
     }
     ++current_turn;
     game_complete = board.gen_moves(current_turn%2,&board);

@@ -6,7 +6,7 @@
 #include "board.h"
 #include "ai.h"
 
-enum GameType{ local, whiteOnline, blackOnline, whiteAI, BlackAI};
+enum GameType{ local, whiteOnline, blackOnline, whiteAI, blackAI};
 
 
 class Interface{
