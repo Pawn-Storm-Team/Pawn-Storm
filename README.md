@@ -54,7 +54,7 @@ Our project is licensed under the MIT open source license. Our license can be fo
 
 ## Project Goals
 - Command line interface  - COMPLETED
-- Full implementation of the chess ruleset - 90% - missing promotion and castling at this point
+- Full implementation of the chess ruleset - 90% - missing castling
 - Board display from perspective of black or white  - COMPLETED
 - Local play, swap player/board view per move  - COMPLETED
 - AI player for singleplayer mode - 90% - written but not successfully linked to interface
@@ -63,7 +63,7 @@ Our project is licensed under the MIT open source license. Our license can be fo
 
 ### MVP Goals
 - Command line interface  - COMPLETED
-- Full implementation of ruleset - 90% - missing promotion and castling at this point
+- Full implementation of ruleset - 90% - missing castling 
 - Local play, swap board - COMPLETED
 - Board display from black or white - COMPLETED
 - AI play - 90% - written but not successfully linked to interface
