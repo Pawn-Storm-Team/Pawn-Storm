@@ -209,7 +209,7 @@ int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank,
     }
     // rank positive, file negative
     if(diff_rank > 0 && diff_file < 0) {
-        for(int i = init_rank + 1, k = init_file - 1; i < dest_rank && k < dest_file; ++i, --k){   
+        for(int i = init_rank + 1, k = init_file - 1; i < dest_rank && k > dest_file; ++i, --k){   
             if(game->board[i][k].piece) {
                 return -6; //blocking piece
             }   
@@ -225,7 +225,7 @@ int bishop_check(chessboard * game, int init_rank, int init_file, int dest_rank,
     }
     // both negative 
     if(diff_rank < 0 && diff_file < 0) {
-        for(int i = init_rank - 1, k = init_file - 1; i < dest_rank && k < dest_file; --i, --k){   
+        for(int i = init_rank - 1, k = init_file - 1; i > dest_rank && k > dest_file; --i, --k){   
             if(game->board[i][k].piece) {
                 return -6; //blocking piece
             }   
