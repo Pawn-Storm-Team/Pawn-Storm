@@ -30,7 +30,7 @@ Our project is licensed under the MIT open source license. Our license can be fo
 
 ## Video
 
- The video for our project can be found [here]()
+ The video for our project can be found [here](https://www.youtube.com/watch?v=KQBZ4I96eAs)
  
 ## Work Summary
 
