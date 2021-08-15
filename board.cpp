@@ -133,6 +133,10 @@ int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool col
   last_move[1] = b;
   last_move[2] = x;
   last_move[3] = y;
+  if(toupper(board[x][y].piece->icon) == 'P' && (x == 0 || x == 7)) { //Basic pawn promotion
+      delete board[x][y].piece;
+      board[x][y].piece = new Queen(color);
+  }
 
   return out;
 }
@@ -244,6 +248,12 @@ void chessboard::ai_move(int init_rank, int init_file, int dest_rank, int dest_f
     last_move[1] = init_file;
     last_move[2] = dest_rank;
     last_move[3] = dest_file;
+
+    if(toupper(board[dest_rank][dest_file].piece->icon) == 'P' && (dest_rank == 0 || dest_rank == 7)) { //Basic pawn promotion
+      bool temp = board[dest_rank][dest_file].piece->owner;
+      delete board[dest_rank][dest_file].piece;
+      board[dest_rank][dest_file].piece = new Queen(temp);
+  }
 }
 
 

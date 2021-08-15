@@ -16,8 +16,8 @@ struct Move{
 
 class Piece {
 public:
-    int ** move_list{};
-    vector<Move> moves;
+    //int ** move_list{};
+    //vector<Move> moves;
     Piece();
     ~Piece();
     Piece(int piece_value, bool owner, char icon);

@@ -1,4 +1,5 @@
 #include "ai.h"
+#include "board.h"
 
 ai_move minimax(chessboard * game, bool player, int depth) {
       //determine legal moves
