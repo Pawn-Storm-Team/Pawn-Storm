@@ -26,7 +26,7 @@ Interface::~Interface(){
 
 int Interface::menu(){
   cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
-  //intro();
+  intro();
   board.initialize();
   action_prompt();
   return 0;
@@ -85,6 +85,7 @@ int Interface::action_prompt(){
     //main turn pattern
     if(gameType == whiteAI){
       ai_turn();
+      ++current_turn;
     }
     else {
       int error_code = turn_prompt();
@@ -94,6 +95,7 @@ int Interface::action_prompt(){
       };
     }
     if(gameType == blackAI){
+      ++current_turn;
       ai_turn();
     }
     ++current_turn;
