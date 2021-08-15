@@ -1,5 +1,0 @@
-break duplicate()
-break draw_board
-break /u/jbedette/Pawn-Storm/board.cpp:230
-break board.cpp:206
-  condition $bpnum p

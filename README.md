@@ -30,17 +30,20 @@ Our project is licensed under the MIT open source license. Our license can be fo
 
 ## Video
 
- The video for our project can be found [here]()
+ The video for our project can be found [here](https://www.youtube.com/watch?v=KQBZ4I96eAs)
  
 ## Work Summary
 
   Max Van Raden wrote the AI and wrote the piece check functions, the agnostic check functions, and the function for determining
-  whether or not the king is check.
+  whether or not the king is check. He also wrote the generate_moves function for each piece, which returns the legal moves an
+  individual piece can make and is used as part of the larger gen_moves function
   
   John Bedette wrote the interface, designed the game loop and developed associated functionality, and 
-  worked on the piece check functions and the king check function.
+  worked on the piece check functions and the king check function. He also wrote the gen_moves function that creates 
+  a vector list of all legal moves in a given board state, which is needed both for the AI and to determine checkmate.
   
-  Development was done largely in tandem, and both team members participated in bug fixing, testing, and developing beyond what is listed above. 
+  Development was done largely in tandem, and both team members participated in bug fixing, testing, and developing
+  beyond what is listed above. 
 
 
 
@@ -53,28 +56,28 @@ Our project is licensed under the MIT open source license. Our license can be fo
 - Week 6 : Quashing of the bugs
 
 ## Project Goals
-- Command line interface 
-- Full implementation of the chess ruleset
-- Board display from perspective of black or white
-- Local play, swap player/board view per move 
-- AI player for singleplayer mode
-- Output game as PGN file 
-- Take move input as algebraic chess notation
+- Command line interface  - COMPLETED
+- Full implementation of the chess ruleset - 90% - missing castling
+- Board display from perspective of black or white  - COMPLETED
+- Local play, swap player/board view per move  - COMPLETED
+- AI player for singleplayer mode - 90% - written but not successfully linked to interface
+- Output game as PGN file - INCOMPLETE 
+- Take move input as algebraic chess notation - INCOMPLETE
 
 ### MVP Goals
-- Command line interface 
-- Full implementation of ruleset
-- Local play, swap board
-- Board display from black or white
-- AI play
-- Move input in A3B4 format
+- Command line interface  - COMPLETED
+- Full implementation of ruleset - 90% - missing castling 
+- Local play, swap board - COMPLETED
+- Board display from black or white - COMPLETED
+- AI play - 90% - written but not successfully linked to interface
+- Move input in A3B4 format - COMPLETED
 
 ### Prototype Goals
-- CLI
-- Ruleset
-- Local play
-- Board display
-- Move input A3B4 format
+- CLI - COMPLETED
+- Ruleset - COMPLETED
+- Local play - COMPLETED
+- Board display - COMPLETED
+- Move input A3B4 format - COMPLETED
 
 
 

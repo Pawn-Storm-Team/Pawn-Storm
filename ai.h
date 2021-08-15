@@ -1,6 +1,4 @@
 class chessboard;
-class piece;
-class square;
 
 
 /*
