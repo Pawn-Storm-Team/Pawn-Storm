@@ -189,8 +189,8 @@ void Queen::generate_moves(vector<vector<int>> & moves,int a, int b){
     //Code of rook and bishop combined 
     
     vector<int> out (4,-1);
-    out[0] = a;
-    out[1] = b;
+    out[0] = a; // rank
+    out[1] = b; // file 
     
     //Bishop
     //one loop for each diagonal direction
@@ -204,12 +204,12 @@ void Queen::generate_moves(vector<vector<int>> & moves,int a, int b){
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1, j = b+1; i >= 7 && j <= 7; --i, ++j) {
+    for(int i = a-1, j = b+1; i >= 0 && j <= 7; --i, ++j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1,  j = b-1; i >= 7 && j >= 7; --i, --j) {
+    for(int i = a-1,  j = b-1; i >= 0 && j >= 0; --i, --j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
