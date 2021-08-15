@@ -122,7 +122,6 @@ int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool col
   //if move is illegal, send error, redo turn
   int out = check_move(game,a,b,x,y,!color);
   if(out < 0){
-    cout << "Illegal move, please try again";
     return out;
   }
 
@@ -191,6 +190,7 @@ int chessboard::get_value() {
   return state_value;
 }
 
+
 //deep copy board for ai simming
 chessboard * chessboard::duplicate(){
   chessboard * dupe = new chessboard();
@@ -236,7 +236,7 @@ chessboard * chessboard::duplicate(){
 //takes no prisoners and considers no move legality
 void chessboard::ai_move(int init_rank, int init_file, int dest_rank, int dest_file) {
     if(board[dest_rank][dest_file].piece) {
-        delete board[dest_rank][dest_file].piece;
+        //delete board[dest_rank][dest_file].piece;
     }
     board[dest_rank][dest_file].piece = board[init_rank][init_file].piece;
     board[init_rank][init_file].piece = nullptr;

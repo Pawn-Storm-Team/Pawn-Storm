@@ -26,7 +26,7 @@ Interface::~Interface(){
 
 int Interface::menu(){
   cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
-  intro();
+  //intro();
   board.initialize();
   action_prompt();
   return 0;
@@ -89,6 +89,7 @@ int Interface::action_prompt(){
     else {
       int error_code = turn_prompt();
       while(error_code < 0){
+        cout << "Illegal move, try again, error code: " << error_code;
         error_code = turn_prompt();
       };
     }
@@ -207,7 +208,6 @@ int Interface::build_vs_AI(){
 };
 
 string Interface::convert_input(string input) {
-  cout << "\nThis is the input: " << input << endl;
   for(int i = 0; i < 6; ++i) {
     if(i != 2) {
       if(toupper(input[i]) == 'A') {
@@ -236,7 +236,6 @@ string Interface::convert_input(string input) {
       }
     }
   }
-  cout << "\nThis is the input after being modified: " << input << endl;
   return input;
 }
 

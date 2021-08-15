@@ -44,10 +44,6 @@ int agnostic_check(chessboard * game, int init_rank,int init_file,int dest_rank,
 int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool player) {
 
 
-    // int init_rank = move[0];
-    // int init_file = move[1];
-    // int dest_rank = move[2];
-    // int dest_file = move[3];
 
     int a_check = agnostic_check(game, init_rank, init_file, dest_rank, dest_file, player);
     if(a_check < 0) return a_check;
@@ -79,25 +75,12 @@ int check_move(chessboard * game, int init_rank, int init_file, int dest_rank, i
             result = king_check(game, init_rank, init_file, dest_rank, dest_file);
             break;
         default:
-            return -80;//placeholder for default error   
+            return -70;//placeholder for default error   
     }
-    result = is_in_check(game,init_rank, init_file, dest_rank, dest_file, is_capture, player);
+    int check_check = is_in_check(game,init_rank, init_file, dest_rank, dest_file, is_capture, player);//bout to spit some hot fiya
+    if (!check_check) return -60;
     return result;
 }
-/*
-int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, int dest_file, bool is_capture, bool player) {
-    int king_rank = -1;
-    int king_file = -1; 
-    int is_king = 0; //if the king is the piece moving, we can just check the destination square without "moving" pieces to see if the king would be in check
-    int in_check = 0; //This flag is used to track if the king is in check so that the temporary movement can be undone
-
-    if(game->board[init_rank][init_file].piece->icon == 'k' || game->board[init_rank][init_file].piece->icon == 'K') {
-        king_rank = dest_rank;
-        king_file = dest_file; 
-        is_king = 1;
-    }
-}
-*/
 //Individual piece move check functions 
 int white_pawn_check(chessboard * game, int init_rank,int init_file,int dest_rank,int dest_file, bool is_capture, bool player) {
     int legality = -3;
@@ -573,5 +556,5 @@ int is_in_check(chessboard * game, int init_rank, int init_file, int dest_rank, 
           if(inCheck) {
               return -8; //The king is in check
           }
-          return 0;
+          return 1;
 }
