@@ -35,12 +35,15 @@ Our project is licensed under the MIT open source license. Our license can be fo
 ## Work Summary
 
   Max Van Raden wrote the AI and wrote the piece check functions, the agnostic check functions, and the function for determining
-  whether or not the king is check.
+  whether or not the king is check. He also wrote the generate_moves function for each piece, which returns the legal moves an
+  individual piece can make and is used as part of the larger gen_moves function
   
   John Bedette wrote the interface, designed the game loop and developed associated functionality, and 
-  worked on the piece check functions and the king check function.
+  worked on the piece check functions and the king check function. He also wrote the gen_moves function that creates 
+  a vector list of all legal moves in a given board state, which is needed both for the AI and to determine checkmate.
   
-  Development was done largely in tandem, and both team members participated in bug fixing, testing, and developing beyond what is listed above. 
+  Development was done largely in tandem, and both team members participated in bug fixing, testing, and developing
+  beyond what is listed above. 
 
 
 
