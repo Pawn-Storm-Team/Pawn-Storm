@@ -22,8 +22,8 @@ ai_move minimax(chessboard * game, bool player, int depth) {
       //Meat of the recursion
       //list of ai_move structs sized at theoretical maximum legal moves
       game->gen_moves(player, game);//generate all legal moves for the current player in the current board state
-      cerr << "\n array setting:" << game->legal_moves.size();
-      ai_move * move_list = new ai_move[game->legal_moves.size()];
+      cerr << "\n array setting:" << game->legal_moves.size()-1;
+      ai_move * move_list = new ai_move[game->legal_moves.size()-1];
 
       for(int i = 0; i < game->legal_moves.size(); ++i) {
         //chessboard * temp = game->duplicate();

@@ -254,7 +254,7 @@ void Interface::check_test(){
 
 void Interface::ai_turn() {
     ai_move move;
-    move = minimax(&board,current_turn%2, 3);
+    move = minimax(&board,!(current_turn%2), 1);
     board.ai_move(move.move[0], move.move[1], move.move[2], move.move[3]);
     return;
 }

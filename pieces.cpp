@@ -61,7 +61,8 @@ King::King(bool owner) : Piece(999, owner, 'K') {
 
 
 
-void Pawn::generate_moves(vector<vector<int>> & moves,int a, int b) { //a == init rank, b == init file
+//void Pawn::generate_moves(vector<vector<int>> & moves,int a, int b) { //a == init rank, b == init file
+void Pawn::generate_moves(deque<vector<int>> & moves,int a, int b) { //a == init rank, b == init file
 // int Pawn::generate_moves(vector<vector<int>> *& moves,int a, int b) { //a == init rank, b == init file
     
     int z; //used to modify function for black/white
@@ -93,7 +94,8 @@ void Pawn::generate_moves(vector<vector<int>> & moves,int a, int b) { //a == ini
     moves.push_back(out);
 
 };
-void Bishop::generate_moves(vector<vector<int>> & moves,int a, int b) {
+//void Bishop::generate_moves(vector<vector<int>> & moves,int a, int b) {
+void Bishop::generate_moves(deque<vector<int>> & moves,int a, int b) {
     
     vector<int> out (4,-1);
     out[0] = a;
@@ -109,18 +111,19 @@ void Bishop::generate_moves(vector<vector<int>> & moves,int a, int b) {
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1, j = b+1; i >= 7 && j <= 7; --i, ++j) {
+    for(int i = a-1, j = b+1; i >= 0 && j <= 7; --i, ++j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1, j = b-1; i >= 7 && j >= 7; --i, --j) {
+    for(int i = a-1, j = b-1; i >= 0 && j >= 0; --i, --j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
     }
 };
-void Knight::generate_moves(vector<vector<int>> & moves,int a, int b) {
+void Knight::generate_moves(deque<vector<int>> & moves,int a, int b) {
+//void Knight::generate_moves(vector<vector<int>> & moves,int a, int b) {
     vector<int> out (4,-1);
     out[0] = a;
     out[1] = b;
@@ -158,7 +161,8 @@ void Knight::generate_moves(vector<vector<int>> & moves,int a, int b) {
     moves.push_back(out);
 
 };
-void Rook::generate_moves(vector<vector<int>> & moves,int a, int b) {
+//void Rook::generate_moves(vector<vector<int>> & moves,int a, int b) {
+void Rook::generate_moves(deque<vector<int>> & moves,int a, int b) {
     vector<int> out (4,-1);
     out[0] = a;
     out[1] = b;
@@ -185,7 +189,8 @@ void Rook::generate_moves(vector<vector<int>> & moves,int a, int b) {
     }
 
 };
-void Queen::generate_moves(vector<vector<int>> & moves,int a, int b){
+//void Queen::generate_moves(vector<vector<int>> & moves,int a, int b){
+void Queen::generate_moves(deque<vector<int>> & moves,int a, int b){
     //Code of rook and bishop combined 
     
     vector<int> out (4,-1);
@@ -204,12 +209,12 @@ void Queen::generate_moves(vector<vector<int>> & moves,int a, int b){
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1, j = b+1; i >= 7 && j <= 7; --i, ++j) {
+    for(int i = a-1, j = b+1; i >= 0 && j <= 7; --i, ++j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1,  j = b-1; i >= 7 && j >= 7; --i, --j) {
+    for(int i = a-1,  j = b-1; i >= 0 && j >= 0; --i, --j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
@@ -237,7 +242,8 @@ void Queen::generate_moves(vector<vector<int>> & moves,int a, int b){
         moves.push_back(out);
     }
 };
-void King::generate_moves(vector<vector<int>> & moves,int a, int b) {
+//void King::generate_moves(vector<vector<int>> & moves,int a, int b) {
+void King::generate_moves(deque<vector<int>> & moves,int a, int b) {
     vector<int> out (4,-1);
     out[0] = a;
     out[1] = b;

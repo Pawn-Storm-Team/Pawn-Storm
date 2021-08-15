@@ -4,6 +4,8 @@
 #include "board.h"
 #include "check_move.h"
 #include <vector>
+#include <deque>
+
 using namespace std;
 square::square() {
   piece = nullptr;
@@ -151,26 +153,23 @@ int chessboard::make_move(chessboard * game,int a, int b, int x, int y, bool col
 //if no possible moves, indicate to interface that game is complete
 bool chessboard::gen_moves(bool color, chessboard * game){
   legal_moves.clear();
-  for(int i = 0; i < 7; ++i){
-    for(int j = 0; j < 7;++j){
+  deque<vector<int>> moves;
+  for(int i = 0; i < 8; ++i){
+    for(int j = 0; j < 8;++j){
 
       Piece * curr = board[i][j].piece;
       if(curr && curr->owner == color){
-
-        vector<vector<int>> moves;
         curr->generate_moves(moves, i, j);
-
-
-        while(!moves.empty()){
-          vector<int> move_vec (4,-1);
-          copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
-          moves.pop_back();
-          if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],!color)){
-            legal_moves.push_back(move_vec);
-          }
-        }
-
       }
+    }
+  }
+  while(!moves.empty()){
+    //vector<int> move_vec (4,-1);
+    //copy(moves[moves.size()-1].begin(),moves[moves.size()-1].end(),move_vec.begin());
+    vector<int> move_vec = moves.back();
+    moves.pop_back();
+    if(check_move(game,move_vec[0],move_vec[1],move_vec[2],move_vec[3],color)>= 0){
+      legal_moves.push_back(move_vec);
     }
   }
   return legal_moves.empty();
@@ -249,7 +248,7 @@ void chessboard::ai_move(int init_rank, int init_file, int dest_rank, int dest_f
     last_move[2] = dest_rank;
     last_move[3] = dest_file;
 
-    if(toupper(board[dest_rank][dest_file].piece->icon) == 'P' && (dest_rank == 0 || dest_rank == 7)) { //Basic pawn promotion
+    if(board[dest_rank][dest_file].piece && toupper(board[dest_rank][dest_file].piece->icon) == 'P' && (dest_rank == 0 || dest_rank == 7)) { //Basic pawn promotion
       bool temp = board[dest_rank][dest_file].piece->owner;
       delete board[dest_rank][dest_file].piece;
       board[dest_rank][dest_file].piece = new Queen(temp);
