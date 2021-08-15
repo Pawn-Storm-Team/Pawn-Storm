@@ -26,9 +26,10 @@ Interface::~Interface(){
 
 int Interface::menu(){
   cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
-  intro();
+  if(intro() != 4){
   board.initialize();
   action_prompt();
+  }
   return 0;
 }
 int Interface::intro() {
@@ -68,6 +69,7 @@ int Interface::intro() {
       break;
     case '4':
       cout << "Goodbye";
+      choice = 4;
       break;
     default: 
       cout << "Invalid Choice.";
@@ -135,10 +137,6 @@ int Interface::turn_prompt(){
   cin.clear();
   cin.ignore();
   input = convert_input(input);
-  //todo sanitize further
-  //glaring holes
-  // - 7 digit numbers
-  // - other things I haven't thought of
 
   int valid = 0;
   while(!(valid = move_format_validator(input[0],input[1],input[3],input[4]))){
@@ -160,13 +158,6 @@ int Interface::turn_prompt(){
   x = input[3] - '1';
   y = input[4] - '1';
   out = board.make_move(&board,a,b,x,y,current_turn%2);
-  /*
-  //testing
-  cout << "/n>>>>>>>testing board dup\n";
-  chessboard * dupe = board.duplicate();
-  cout << "/n>>>>>>> dup draw\n";
-  dupe->draw_board();
-  */
   return board.make_move(&board,b,a,y,x,current_turn%2); //order changed so that file, rank input can be translated to rank, file format for throughput 
 }
 

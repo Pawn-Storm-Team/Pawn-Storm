@@ -5,3 +5,4 @@ jmacro
 *.gch
 a.out
 *.swp*
+.nfs*
