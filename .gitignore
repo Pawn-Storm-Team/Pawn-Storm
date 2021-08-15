@@ -6,3 +6,5 @@ jmacro
 a.out
 *.swp*
 .nfs*
+bpoints
+.exe

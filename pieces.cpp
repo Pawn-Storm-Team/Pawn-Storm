@@ -109,12 +109,12 @@ void Bishop::generate_moves(vector<vector<int>> & moves,int a, int b) {
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1, j = b+1; i >= 7 && j <= 7; --i, ++j) {
+    for(int i = a-1, j = b+1; i >= 0 && j <= 7; --i, ++j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
     }
-    for(int i = a-1, j = b-1; i >= 7 && j >= 7; --i, --j) {
+    for(int i = a-1, j = b-1; i >= 0 && j >= 0; --i, --j) {
         out[2] = i;
         out[3] = j;
         moves.push_back(out);
