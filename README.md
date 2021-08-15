@@ -53,28 +53,28 @@ Our project is licensed under the MIT open source license. Our license can be fo
 - Week 6 : Quashing of the bugs
 
 ## Project Goals
-- Command line interface 
-- Full implementation of the chess ruleset
-- Board display from perspective of black or white
-- Local play, swap player/board view per move 
-- AI player for singleplayer mode
-- Output game as PGN file 
-- Take move input as algebraic chess notation
+- Command line interface  - COMPLETED
+- Full implementation of the chess ruleset - 90% - missing promotion and castling at this point
+- Board display from perspective of black or white  - COMPLETED
+- Local play, swap player/board view per move  - COMPLETED
+- AI player for singleplayer mode - 90% - written but not successfully linked to interface
+- Output game as PGN file - INCOMPLETE 
+- Take move input as algebraic chess notation - INCOMPLETE
 
 ### MVP Goals
-- Command line interface 
-- Full implementation of ruleset
-- Local play, swap board
-- Board display from black or white
-- AI play
-- Move input in A3B4 format
+- Command line interface  - COMPLETED
+- Full implementation of ruleset - 90% - missing promotion and castling at this point
+- Local play, swap board - COMPLETED
+- Board display from black or white - COMPLETED
+- AI play - 90% - written but not successfully linked to interface
+- Move input in A3B4 format - COMPLETED
 
 ### Prototype Goals
-- CLI
-- Ruleset
-- Local play
-- Board display
-- Move input A3B4 format
+- CLI - COMPLETED
+- Ruleset - COMPLETED
+- Local play - COMPLETED
+- Board display - COMPLETED
+- Move input A3B4 format - COMPLETED
 
 
 
