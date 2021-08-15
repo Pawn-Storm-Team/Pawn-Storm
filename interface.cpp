@@ -26,7 +26,7 @@ Interface::~Interface(){
 
 int Interface::menu(){
   cout << "\t\t Welcome to PawnStorm! \t\t\n\n";
-  //intro();
+  intro();
   board.initialize();
   action_prompt();
   return 0;
