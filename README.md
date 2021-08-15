@@ -11,8 +11,8 @@ from scratch, and is implemented using the minimax algorithm.
 
 ## Running the app
 1. Clone the repository to a local directory
-2. Run from the root of the directory: `g++ *.cpp`
-3. Run: `./a.out` (or, if on Windows, `./a.exe`)
+2. Run from the root of the directory: `make`
+3. Run: `./pawnstorm` (or, if on Windows, `./pawnstorm.exe`)
 
 ## Screenshot of game in progress
 ![alt text](https://github.com/Pawn-Storm-Team/Pawn-Storm/blob/dev/Screenshot.PNG)
